@@ -15,6 +15,10 @@ Submission.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    position: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     user_id: {
       type: DataTypes.INTEGER,
       references: {
