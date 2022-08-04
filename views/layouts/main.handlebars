@@ -4,10 +4,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{!-- Do we need jass? Need to link skeleton --}}
     <link rel="stylesheet" href="/css/jass.css">
+    {{!-- Check this is the right version of skeleton to link --}}
+    <link rel="skeleton" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+    <link rel="handwritten" href="/css/skeleton.css">
     <title>Narratorium</title>
 </head>
 <body>
+    {{!-- Navbar -- need name on left and login/ signup on right --}}
+    <div>
+        <span>Narratorium</span>
+        <ul>
+            {{!-- Links to login page, which offers a link to the signup page on it --}}
+            {{#if loggedIn}}
+            <li id="logout">Logout</li>
+            {{else}}
+            <li><a href="/login">Login / Signup</a></li>
+            {{/if}}
+        </ul>
+    </div>
     {{{body}}}
 </body>
 </html>

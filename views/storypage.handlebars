@@ -1,0 +1,11 @@
+{{#if loggedIn}}
+{{!-- Needs quill toolbar --}}
+{{!-- Needs to show words selected below toolbar but above story, to take in user id of each word --}}
+
+{{!-- is container --}}
+<div>
+    {{story}}
+</div>
+{{else}}
+<p>Please <a href="/login">login</a> to edit the story</p>
+{{/if}}
