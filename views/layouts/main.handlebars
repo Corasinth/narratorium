@@ -12,12 +12,16 @@
     <title>Narratorium</title>
 </head>
 <body>
-    {{!-- Navbar -- need link to homepage on left and login/ signup on right --}}
+    {{!-- Navbar -- need name on left and login/ signup on right --}}
     <div>
         <span>Narratorium</span>
         <ul>
             {{!-- Links to login page, which offers a link to the signup page on it --}}
-            <li>Login / Signup</li>
+            {{#if !loggedIn}}
+            <li><a href="/login">Login / Signup</a></li>
+            {{else}}
+            <li id="logout">Logout</li>
+            {{/if}}
         </ul>
     </div>
     {{{body}}}
