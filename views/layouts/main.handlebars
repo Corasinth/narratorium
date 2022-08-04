@@ -17,10 +17,10 @@
         <span>Narratorium</span>
         <ul>
             {{!-- Links to login page, which offers a link to the signup page on it --}}
-            {{#if !loggedIn}}
-            <li><a href="/login">Login / Signup</a></li>
-            {{else}}
+            {{#if loggedIn}}
             <li id="logout">Logout</li>
+            {{else}}
+            <li><a href="/login">Login / Signup</a></li>
             {{/if}}
         </ul>
     </div>
