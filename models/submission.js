@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Story extends Model { }
+class Submission extends Model {}
 
-Story.init(
+Submission.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -11,18 +11,32 @@ Story.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    storyname: {
+    submission: {
       type: DataTypes.STRING,
       allowNull: false,
-    }
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'user',
+        key: 'id',
+      },
+    },
+    story_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'story',
+        key: 'id',
+      },
+    },
   },
   {
     sequelize,
     timestamps: true,
     freezeTableName: true,
     underscored: true,
-    modelName: 'story',
+    modelName: 'submission',
   }
 );
 
-module.exports = Story;
+module.exports = Submission;
