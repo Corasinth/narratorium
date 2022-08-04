@@ -12,7 +12,7 @@ Submission.belongsTo(User, {
 });
 
 Submission.belongsTo(Story, {
-  foreignKey: 'story-id',
+  foreignKey: 'story_id',
   onDelete: 'CASCADE'
 })
 
