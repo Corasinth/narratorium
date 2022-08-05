@@ -62,7 +62,11 @@ io.on("connection", async (socket) => {
             })
             //Add code to assemble story, current values are temporary
             let storyString = "There is a house in New Orleans they call the Rising Sun."
-            io.emit('displayStory', storyString)
+
+const testData = await Submission.findAll()
+io.emit('testEvent', testData)
+            
+            // io.emit('displayStory', storyString)
         } catch (err) {
             io.emit('error', err)
         }
@@ -102,10 +106,14 @@ io.on("connection", async (socket) => {
                 }
             })
             //Add code to turn submission table into full story
+
+const testData = await Submission.findAll()
+io.emit('testEvent', testData)
+
+            // io.emit('displayStory', storyString)
         } catch (err) {
             io.emit('error', err)
         };
-        io.emit('displayStory', storyString)
     });
 //Takes in the position of the word deleted and adjusts the database accordingly.
     socket.on('deletion', async (position) => {
@@ -131,7 +139,11 @@ io.on("connection", async (socket) => {
        } catch (err) {
         io.emit('error', err)
        };
-        io.emit('displayStory', storyString)
+
+const testData = await Submission.findAll()
+io.emit('testEvent', testData)
+
+        // io.emit('displayStory', storyString)
     })
 
 });

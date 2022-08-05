@@ -15,6 +15,10 @@ socket.on('error', (error) => {
     console.log(`%c Server returned the following error: ${error}, 'color:red;font-weight:500'`)
 })
 
+socket.on('testEvent', (data) => {
+    console.table(data)
+})
+
 //Call this function when a user makes a submission
 function onSubmit (submissionText, position, user, story) {
     socket.emit('submission', submissionText, position, user, story)
