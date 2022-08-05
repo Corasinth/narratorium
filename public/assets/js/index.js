@@ -30,8 +30,8 @@ function onDelete (word_id) {
 }
 
 //Call this function when the user navigates to a story
-function viewStory(storyName) {
-    socket.emit('viewStory', storyname)
+function viewStory(story_id) {
+    socket.emit('viewStory', story_id)
 }
 
 //Call this function when the user renames a story

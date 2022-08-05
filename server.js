@@ -55,24 +55,26 @@ app.use(routes);
 // Set up sockets
 io.on("connection", async (socket) => {
     console.log(socket.id)
-    socket.on('viewStory', async (storyName) => {
+    socket.on('viewStory', async (story_id) => {
         try {
-            let storyData = await Story.findOne({
-                where: {
-                    storyname: storyName
-                }
-            })
+            const storyData = await Story.findByPk(req.params.id, {
+                include: [{
+                    model: Submission,
+                    separate: true,
+                    order: [['position', 'ASC']]
+                }],
+            });
             //Add code to assemble story, current values are temporary
-            let storyString = "There is a house in New Orleans they call the Rising Sun."
 
             const testData = await Submission.findAll()
             io.emit('testEvent', testData)
 
-            // io.emit('displayStory', storyString)
+            // io.emit('displayStory', storyData)
         } catch (err) {
             io.emit('error', err)
         }
     })
+    //Takes in title and creates a new story
     //Takes in story_id and renames the story title 
     socket.on('renameStory', async (newName, story_id, response) => {
         try {
