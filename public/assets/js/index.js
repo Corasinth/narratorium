@@ -1,7 +1,7 @@
 //Directs socket connection to server
 const socket = io('http://localhost:3001') || io('https://narratorium.herokuapp.com')
 
-//Logs connection on connection to server
+//TODO place this in an event listener 
 socket.on('connect', () => {
     console.log(`Connected with socket id ${socket.id}`)
 })
@@ -15,12 +15,17 @@ socket.on('error', (error) => {
     console.log(`%c Server returned the following error: ${error}, 'color:red;font-weight:500'`)
 })
 
+//Call this function when a user makes a submission
 function onSubmit (submissionText, position, user, story) {
-    socket.emit('submission', submissionText, position, user)
+    socket.emit('submission', submissionText, position, user, story)
 }
 
+//Call this function when a user deletes a word
 function onDelete (wordDeleted, position) {
     socket.emit('deletion', wordDeleted, position, story)
 }
 
-
+//Call this function when the user navigates to a story
+function viewStory(storyName) {
+    socket.emit('viewStory', storyname)
+}

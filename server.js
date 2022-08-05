@@ -51,10 +51,22 @@ app.use(routes);
 
 // Set up sockets
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
     console.log(socket.id)
-    let storyString = 'There once was a house in New Orleans they called the rising sun.'
-    io.emit('displayStory', storyString)
+    socket.on('viewStory', (storyName) => {
+        try {
+            let storyData = await Story.findOne({
+                where: {
+                    storyname:storyName
+                }
+            })
+            //Add code to assemble story, current values are temporary
+            let storyString = "There is a house in New Orleans they call the Rising Sun."
+            io.emit('displayStory', storyString)
+        } catch (err) {
+            io.emit('error', err)
+        }
+    })
 //Takes in submission, position, and user, and updates the database accordingly
     socket.on('submission', async (submission, position, username, storyname) => {
         console.log(`Recieved submission of ${submission} at position ${position} from user ${user}`);
