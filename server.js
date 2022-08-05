@@ -76,18 +76,32 @@ io.on("connection", (socket) => {
             //Add code to turn submission table into full story
         } catch (err) {
             io.emit('error', err)
-        }
+        };
         io.emit('displayStory', storyString)
     });
 //Takes in the position of the word deleted and adjusts the database accordingly.
     socket.on('deletion', async (position) => {
         console.log(`Deleted the word at position ${position}`)
-        
-
-
-
-
-
+       try {
+        const submissionData = await Submission.destroy({
+            where: {
+                position: position
+            }
+        })
+        const newSubmissionData = await Submission.update({
+            postion: this.position-1
+        }, 
+        {
+            where: {
+                position: {
+                    [OP.gt]: position 
+                }
+            }
+        })
+        console.log(newSubmissionData)
+       } catch (err) {
+        io.emit('error', err)
+       };
         io.emit('displayStory', storyString)
     })
 
