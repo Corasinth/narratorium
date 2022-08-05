@@ -33,3 +33,12 @@ function onDelete (wordDeleted, position) {
 function viewStory(storyName) {
     socket.emit('viewStory', storyname)
 }
+
+//Call this function when the user renames a story
+function renameStory(newName, story_id) {
+    socket.emit('renameStory', newName, story_id, (response) => {
+        //Function for renaming the story title and any relevant HTML changes here
+        console.log(response)
+    })
+    
+}

@@ -53,7 +53,7 @@ app.use(routes);
 
 io.on("connection", async (socket) => {
     console.log(socket.id)
-    socket.on('viewStory', (storyName) => {
+    socket.on('viewStory', async (storyName) => {
         try {
             let storyData = await Story.findOne({
                 where: {
@@ -71,6 +71,16 @@ io.emit('testEvent', testData)
             io.emit('error', err)
         }
     })
+//Takes in story_id and renames the story title 
+    socket.on('renameStory', async (newName, story_id, response) => {
+        console.log(`Recieved request to rename story ${story_id}, to ${newName}`)
+
+        
+        response({
+            status: newName
+        });
+    })
+
 //Takes in submission, position, and user, and updates the database accordingly
     socket.on('submission', async (submission, position, username, storyname) => {
         console.log(`Recieved submission of ${submission} at position ${position} from user ${user}`);
