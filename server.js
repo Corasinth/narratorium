@@ -53,6 +53,35 @@ app.use(routes);
 
 io.on("connection", (socket) => {
     console.log(socket.id)
+    let storyString = 'There once was a house in New Orleans they called the rising sun.'
+    io.emit('displayStory', storyString)
+//Takes in submission, position, and user, and updates the database accordingly
+    socket.on('submission', async (submission, position, user, story) => {
+        console.log(`Recieved submission of ${submission} at position ${position} from user ${user}`);
+        let submissionArray = submission.split(' ');
+        try {
+            let user_id = await User.findOne()
+            for (let word of submissionArray) {
+                await Submission.create(word, position, user_id)
+            }
+            //Add code to turn submission table into full story
+        } catch (err) {
+            io.emit('error', err)
+        }
+        io.emit('displayStory', storyString)
+    });
+//Takes in the position of the word deleted and adjusts the database accordingly.
+    socket.on('deletion', async (position) => {
+        console.log(`Deleted the word at position ${position}`)
+        
+
+
+
+
+
+        io.emit('displayStory', storyString)
+    })
+
 });
 
 
