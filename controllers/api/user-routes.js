@@ -73,7 +73,7 @@ router.post("/login", async (req, res) => {
   try {
     const userData = await User.findOne({
       where: {
-        [Op.or]: [{ email: req.body.username_email }, { name: req.body.username_email }]
+        [Op.or]: [{ email: req.body.username_email }, { username: req.body.username_email }]
       }
     });
 
