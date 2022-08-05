@@ -40,5 +40,12 @@ function renameStory(newName, story_id) {
         //Function for renaming the story title and any relevant HTML changes here
         console.log(response)
     })
-    
+}
+
+//Call this function when the user renames a story
+function addStory(storyName) {
+    socket.emit('addStory', storyName, (response) => {
+        //Function for adding a new story, place any relevant HTML changes here
+        console.log(response)
+    })
 }
