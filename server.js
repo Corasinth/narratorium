@@ -60,13 +60,29 @@ io.on("connection", (socket) => {
         console.log(`Recieved submission of ${submission} at position ${position} from user ${user}`);
         let submissionArray = submission.split(' ');
         try {
+            //Updates the position of every of word in the story after the submission position, by an amount equal to the # of words inserted, 
+            let updatedSubmissionData = await Submission.update({
+                position: this.position+submissionArray.length
+            }, 
+            {
+                where: {
+                    position: {
+                        [OP.gte]: position
+                    }
+                }
+            })
+            console.log(updatedSubmissionData);
+            //Identifies the user
             const user = await User.findOne({
                 where: {
                     name: username
                 }
             })
+            const user_id = user.id
+            //For each word in the submission, creates a new table entry and an appropriate position
             for (let word of submissionArray) {
                 await Submission.create(word, position, user_id)
+                position++
             }
             const story = await Story.findOne({
                 where: {
@@ -88,6 +104,7 @@ io.on("connection", (socket) => {
                 position: position
             }
         })
+        //Decrements each position greater than the position deleted--requires deleting a single word at a time
         const newSubmissionData = await Submission.update({
             postion: this.position-1
         }, 
@@ -106,22 +123,6 @@ io.on("connection", (socket) => {
     })
 
 });
-
-
-
-// io.on('connection', (socket) => {
-//     console.log('hello')
-//     console.log(socket)
-//     console.log(`=======================User with id ${socket.id} connected.=======================`);
-//     //placeholder event handling for testing -- change names later
-//     // socket.on('event', (event) => {
-//     //     console.log(event);
-//     //     io.emit('event', `Someone has triggered an event: ${event}`);
-//     // })
-//     // socket.on('test', () => {
-//     //     console.log('I am active')
-//     // })
-// });
 
 // Sync database and start listening
 sequelize.sync({force: false}).then(() => httpServer.listen(PORT, ()=>{
