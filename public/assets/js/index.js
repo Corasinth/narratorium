@@ -25,7 +25,7 @@ function onSubmit (submissionText, position, user, story) {
 }
 
 //Call this function when a user deletes a word
-function onDelete (wordDeleted, position) {
+function onDelete (wordDeleted, word_id) {
     socket.emit('deletion', wordDeleted, position, story)
 }
 

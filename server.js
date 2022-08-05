@@ -20,7 +20,10 @@ const app = express();
 const hbs = exphbs.create();
 const httpServer = createServer(app);
 const io = new Server(httpServer,{
-    cors: {origin:'*'}
+    cors: {
+        origin: ['https://admin.socket.io/'],
+        credentials: true
+    }
 });
 const PORT = process.env.PORT || 3001;
 
@@ -50,7 +53,6 @@ app.use(routes);
 
 
 // Set up sockets
-
 io.on("connection", async (socket) => {
     console.log(socket.id)
     socket.on('viewStory', async (storyName) => {
@@ -73,12 +75,24 @@ io.emit('testEvent', testData)
     })
 //Takes in story_id and renames the story title 
     socket.on('renameStory', async (newName, story_id, response) => {
-        console.log(`Recieved request to rename story ${story_id}, to ${newName}`)
+        try {
+        console.log(`Recieved request to rename story ${story_id}, to ${newName}`);
+        await Story.update({storyname:newName}, {
+            where: {
+                id: story_id
+            }
+        })
 
-        
+const testData = await Submission.findAll()
+io.emit('testEvent', testData)
+
         response({
             status: newName
         });
+
+        } catch (err) {
+            io.emit('error', err)
+        }
     })
 
 //Takes in submission, position, and user, and updates the database accordingly
@@ -126,36 +140,40 @@ io.emit('testEvent', testData)
         };
     });
 //Takes in the position of the word deleted and adjusts the database accordingly.
-    socket.on('deletion', async (position) => {
-        console.log(`Deleted the word at position ${position}`)
+    socket.on('deletion', async (word_id) => {
+        console.log(`Delete word ${word_id}`)
        try {
-        const submissionData = await Submission.destroy({
-            where: {
-                position: position
-            }
-        })
-        //Decrements each position greater than the position deleted--requires deleting a single word at a time
-        const newSubmissionData = await Submission.update({
-            postion: this.position-1
-        }, 
-        {
-            where: {
-                position: {
-                    [OP.gt]: position 
+            const positionData = await Submission.findOne({
+                attributes: ['position'],
+                where: { id: word_id }
+            });
+            const position = positionData.get({ plain: true }).position;
+
+            const submissionData = await Submission.destroy({
+                where: {
+                    id: word_id
                 }
+            });
+
+            if (!submissionData) {
+                //Error handling
             }
-        })
-        console.log(newSubmissionData)
-       } catch (err) {
-        io.emit('error', err)
-       };
 
-const testData = await Submission.findAll()
-io.emit('testEvent', testData)
+            const incrementPosition = await Submission.increment('position', {
+                by: -1,
+                where: {
+                    position: { [Op.gt]: position }
+                }
+            });
 
-        // io.emit('displayStory', storyString)
+           const testData = await Submission.findAll()
+           io.emit('testEvent', testData)
+
+            // io.emit('displayStory', storyString)
+        } catch (err) {
+            io.emit('error', err)
+        };
     })
-
 });
 
 // Sync database and start listening
