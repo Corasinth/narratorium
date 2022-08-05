@@ -36,7 +36,6 @@ const sess = {
 };
 app.use(session(sess))
 
-const hbs = create(/* {helpers} */);
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 app.set("views", "./views");
