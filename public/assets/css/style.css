@@ -1,0 +1,12 @@
+#navbar {
+    background-color: grey;
+    width: 100%;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.align-center {
+    text-align: center;
+}
