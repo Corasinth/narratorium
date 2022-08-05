@@ -3,3 +3,6 @@ addendum/
 node_modules/
 .env
 package-lock.json
+public/assets/css/normalize.css
+public/assets/css/skeleton.css
+.gitignore
