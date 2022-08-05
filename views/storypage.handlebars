@@ -1,11 +1,24 @@
-{{#if loggedIn}}
+{{!-- {{#if loggedIn}} --}}
 {{!-- Needs quill toolbar --}}
+<div id="editor">
+  <p>{{story.storyname}}</p>
+  <p><br></p>
+</div>
 {{!-- Needs to show words selected below toolbar but above story, to take in user id of each word --}}
 
 {{!-- is container --}}
-<div>
+{{!-- <div class="align center">
     {{story}}
-</div>
-{{else}}
-<p>Please <a href="/login">login</a> to edit the story</p>
-{{/if}}
+</div> --}}
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+<script>
+    console.log({{story.storyname}});
+  var quill = new Quill('#editor', {
+    theme: 'snow'
+  });
+</script>
+{{!-- {{else}}
+<h6 class="align-center">Please <a href="/login">login</a> to edit the story</h6>
+{{/if}} --}}

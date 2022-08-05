@@ -1,18 +1,20 @@
 {{!-- adds tooltip bar to navigation --}}
-{{!-- div container with only h2 Narratorium centered --}}
-{{!-- button below h2 Get Started that directs to our storypage if logged in and directs to login page if not --}}
-{{!-- Description of what narratorium is --}}
 {{!-- shows the story but within the container --}}
 
-<div>
-    <a href="/"><h2>Narratorium</h2></a>
+<div class="container">
+    <a href="/"><h2 class="align-center">Narratorium</h2></a>
+
     {{#if loggedIn}}
+    <div class="one.column offset-by-one.column">
     <a href="/storypage" class="button" id="start-btn">Get Started</a>
+    </div>
     {{else}}
+    <div class="center-btn" id="btn-container">
     <a href="/login" class="button" id="start-btn">Get Started</a>
+    </div>
     {{/if}}
-    <span>Narratorium is a collaborative story in which each user offers a few words to contribute, whether by editing past segments, 
+    <p class="align-center">Narratorium is a collaborative story in which each user offers a few words to contribute, whether by editing past segments, 
         deleting a few words or letters here and there, and/ or adding a few words onto the end.
-    </span>
-    <p>needs to take in our story</p>
+    </p>
+    <p class="align-center">needs to take in our story{{story}}</p>
 </div>

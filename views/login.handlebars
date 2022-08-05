@@ -1,20 +1,21 @@
-<h2>Login</h2>
+<div class="container">
+  <h2 class="align-center">Login</h2>
+  <form class="align-center">
+    <div>
+      <label for="login-username">username/email:</label>
+      <input class="form-input" type="text" id="login-username" />
+    </div>
+    <div>
+      <label for="login-password">password:</label>
+      <input class="form-input" type="password" id="login-password" />
+    </div>
+    <div>
+      <button type="submit" id="login-form">login</button>
+    </div>
+    <div>
+      <span>Or if you don't have an account, sign up <a href="/signup">here</a>.</span>
+    </div>
+  </form>
+</div>
 
-<form>
-  <div>
-    <label for="login-username">username/email:</label>
-    <input class="form-input" type="text" id="login-username" />
-  </div>
-  <div>
-    <label for="login-password">password:</label>
-    <input class="form-input" type="password" id="login-password" />
-  </div>
-  <div>
-    <button type="submit" id="login-btn">login</button>
-  </div>
-  <div>
-    <span>Or if you don't have an account, sign up <a href="/signup">here</a>.</span>
-  </div>
-</form>
-{{!-- Is this linked properly? --}}
-<script src="/js/login.js"></script>
+<script src="/assets/js/login.js"></script>
