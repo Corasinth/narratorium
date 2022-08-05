@@ -33,5 +33,4 @@ router.get("/story", (req, res) => {
   }
 });
 
-
 module.exports = router;
