@@ -13,12 +13,12 @@ const seedDatabase = async () => {
     returning: true,
   });
 
-  const submissions = await Submission.bulkCreate(submissionData, {
+  const story = await Story.bulkCreate(storyData, {
     individualHooks: true,
     returning: true,
   });
-
-  const story = await Story.bulkCreate(storyData, {
+  
+  const submissions = await Submission.bulkCreate(submissionData, {
     individualHooks: true,
     returning: true,
   });

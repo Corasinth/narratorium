@@ -12,7 +12,11 @@ app.use(express.urlencoded({ extended: true }));
 
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-// const routes = require('./controllers/index');
+const session = require("express-session");
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
+const {create} = require("express-handlebars");
+
+const routes = require('./controllers/index');
 const sequelize = require('./config/connection');
 const httpServer = createServer(app);
 const io = new Server(httpServer,{
@@ -21,7 +25,27 @@ const io = new Server(httpServer,{
 
 const PORT = process.env.PORT || 3001;
 
-// app.use(routes);
+const sess = {
+    secret: "i love cats",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 900000
+    },
+    store: new SequelizeStore({db: sequelize})
+};
+app.use(session(sess))
+
+const hbs = create(/* {helpers} */);
+app.engine("handlebars", hbs.engine);
+app.set("view engine", "handlebars");
+app.set("views", "./views");
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(express.static("./public"));
+
+app.use(routes);
 
 // io.on("connection", (socket) => {
 //     console.log('Checking to see if a connection is active');
