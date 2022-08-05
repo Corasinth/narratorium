@@ -1,13 +1,13 @@
 const loginHandler = async (e) => {
   e.preventDefault();
 
-  const username = document.querySelector('#login-username').value.trim();
+  const username_email = document.querySelector('#login-username').value.trim();
   const password = document.querySelector('#login-password').value.trim();
 
-  if(username && password) {
+  if(username_email && password) {
     const res = await fetch("/api/users/login", {
       method: "POST",
-      body: JSON.stringify({username, password}),
+      body: JSON.stringify({username_email, password}),
       headers: {"Content-Type": "application/json"}
     });
     console.log(res);
@@ -15,12 +15,13 @@ const loginHandler = async (e) => {
     if(res.ok) {
       document.location.replace("/");
     } else {
+      const body = await res.json();
       const status = document.getElementById("status");
-      status.innerHTML = `<div class="row p-2 bg-danger m-3 rounded">
-      <p>Invalid username or password</p>
+      status.innerHTML = `<div>
+      <p>${body.message}</p>
     </div>`
     }
   }
 }
 
-document.querySelector('#login-form').addEventListener('submit', loginHandler);
+document.querySelector('#login-form').addEventListener('click', loginHandler);

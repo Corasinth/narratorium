@@ -18,12 +18,16 @@
         <ul>
             {{!-- Links to login page, which offers a link to the signup page on it --}}
             {{#if loggedIn}}
-            <h5 class="align-right" id="logout">Logout</h5>
+            <h5 class="align-right" id="logout"><button>Logout</button></h5>
             {{else}}
-            <h5 class="align-right"><a href="/login">Login / Signup</a></h5>
+            <h5 class="align-right"><a href="/login">Login</a></h5>
+            <h5 class="align-right"><a href="/signup">Signup</a></h5>
             {{/if}}
         {{!-- </ul> --}}
     </div>
     {{{body}}}
+    {{#if loggedIn}}
+    <script src="/assets/js/logout.js"></script>
+    {{/if}}
 </body>
 </html>

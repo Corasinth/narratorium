@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const {User, Story, Submission} = require("../../models");
+const { Op } = require("sequelize");
 
 // "/" get all users
 router.get("/", async (req, res) => {
@@ -72,16 +73,19 @@ router.post("/login", async (req, res) => {
   try {
     const userData = await User.findOne({
       where: {
-        email: req.body.email
+        [Op.or]: [{ email: req.body.username_email }, { username: req.body.username_email }]
       }
     });
 
     if(!userData) {
-      res.status(404).json({message: "No user found with this email address"});
+      res.status(404).json({message: "No user found with this username/email address"});
+      return;
     } else{
       const isValidPassword = userData.checkPassword(req.body.password);
+
       if(!isValidPassword) {
         res.status(404).json({message: "Incorrect password"});
+        return;
       } else {
         
         req.session.save(() => {
