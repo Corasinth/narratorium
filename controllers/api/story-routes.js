@@ -5,7 +5,12 @@ const {User, Story, Submission} = require("../../models");
 router.get("/", async (req, res) => {
   try {
     const storyData = await Story.findAll({
-      include: [{model: Submission}]
+      include: [{
+        model: Submission, 
+        separate: true,
+        order: [['position', 'ASC']]
+      }],
+      
     });
 
     res.status(200).json(storyData);
@@ -18,7 +23,11 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const storyData = await Story.findByPk(req.params.id, {
-      include: [{model: Submission}]
+      include: [{
+        model: Submission, 
+        separate: true,
+        order: [['position', 'ASC']]
+      }],
     });
 
     if(!storyData) {
@@ -49,7 +58,7 @@ router.delete("/:id", async (req, res) => {
     const storyData = await Story.destroy({
       where: {id: req.params.id}
     });
-    
+
     if(!storyData) {
       res.status(400).json({message: "No story found with that id"});
     } else {
