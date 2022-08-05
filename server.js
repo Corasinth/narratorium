@@ -56,14 +56,23 @@ io.on("connection", (socket) => {
     let storyString = 'There once was a house in New Orleans they called the rising sun.'
     io.emit('displayStory', storyString)
 //Takes in submission, position, and user, and updates the database accordingly
-    socket.on('submission', async (submission, position, user, story) => {
+    socket.on('submission', async (submission, position, username, storyname) => {
         console.log(`Recieved submission of ${submission} at position ${position} from user ${user}`);
         let submissionArray = submission.split(' ');
         try {
-            let user_id = await User.findOne()
+            const user = await User.findOne({
+                where: {
+                    name: username
+                }
+            })
             for (let word of submissionArray) {
                 await Submission.create(word, position, user_id)
             }
+            const story = await Story.findOne({
+                where: {
+                    storyname: storyname
+                }
+            })
             //Add code to turn submission table into full story
         } catch (err) {
             io.emit('error', err)
