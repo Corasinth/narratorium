@@ -11,6 +11,10 @@ const path = require("path");
 const routes = require('./controllers/index');
 const sequelize = require('./config/connection');
 
+//Import models 
+const {User, Story, Submission } = require('./models/index');
+const { findByPk } = require("./models/user");
+
 // Initialize packages
 const app = express();
 const hbs = exphbs.create();
@@ -46,14 +50,26 @@ app.use(routes);
 
 
 // Set up sockets
+
 io.on("connection", (socket) => {
-    console.log('Checking to see if a connection is active');
-    //placeholder event handling for testing -- change names later
-    socket.on('event', (event) => {
-        console.log(event);
-        io.emit('event', `Someone has triggered an event: ${event}`);
-    })
+    console.log(socket.id)
 });
+
+
+
+// io.on('connection', (socket) => {
+//     console.log('hello')
+//     console.log(socket)
+//     console.log(`=======================User with id ${socket.id} connected.=======================`);
+//     //placeholder event handling for testing -- change names later
+//     // socket.on('event', (event) => {
+//     //     console.log(event);
+//     //     io.emit('event', `Someone has triggered an event: ${event}`);
+//     // })
+//     // socket.on('test', () => {
+//     //     console.log('I am active')
+//     // })
+// });
 
 // Sync database and start listening
 sequelize.sync({force: false}).then(() => httpServer.listen(PORT, ()=>{
