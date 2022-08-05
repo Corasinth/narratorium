@@ -12,14 +12,14 @@ const routes = require('./controllers/index');
 const sequelize = require('./config/connection');
 
 //Import models 
-const {User, Story, Submission } = require('./models/index');
+const { User, Story, Submission } = require('./models/index');
 const { findByPk } = require("./models/user");
 
 // Initialize packages
 const app = express();
 const hbs = exphbs.create();
 const httpServer = createServer(app);
-const io = new Server(httpServer,{
+const io = new Server(httpServer, {
     cors: {
         origin: ['https://admin.socket.io/'],
         credentials: true
@@ -35,7 +35,7 @@ const sess = {
     cookie: {
         maxAge: 900000
     },
-    store: new SequelizeStore({db: sequelize})
+    store: new SequelizeStore({ db: sequelize })
 };
 app.use(session(sess))
 
@@ -59,90 +59,85 @@ io.on("connection", async (socket) => {
         try {
             let storyData = await Story.findOne({
                 where: {
-                    storyname:storyName
+                    storyname: storyName
                 }
             })
             //Add code to assemble story, current values are temporary
             let storyString = "There is a house in New Orleans they call the Rising Sun."
 
-const testData = await Submission.findAll()
-io.emit('testEvent', testData)
-            
+            const testData = await Submission.findAll()
+            io.emit('testEvent', testData)
+
             // io.emit('displayStory', storyString)
         } catch (err) {
             io.emit('error', err)
         }
     })
-//Takes in story_id and renames the story title 
+    //Takes in story_id and renames the story title 
     socket.on('renameStory', async (newName, story_id, response) => {
         try {
-        console.log(`Recieved request to rename story ${story_id}, to ${newName}`);
-        await Story.update({storyname:newName}, {
-            where: {
-                id: story_id
-            }
-        })
+            console.log(`Recieved request to rename story ${story_id}, to ${newName}`);
+            await Story.update({ storyname: newName }, {
+                where: {
+                    id: story_id
+                }
+            })
 
-const testData = await Submission.findAll()
-io.emit('testEvent', testData)
+            const testData = await Submission.findAll()
+            io.emit('testEvent', testData)
 
-        response({
-            status: newName
-        });
+            response({
+                status: newName
+            });
 
         } catch (err) {
             io.emit('error', err)
         }
     })
 
-//Takes in submission, position, and user, and updates the database accordingly
-    socket.on('submission', async (submission, position, username, storyname) => {
-        console.log(`Recieved submission of ${submission} at position ${position} from user ${user}`);
+    //Takes in submission, position, and user, and updates the database accordingly
+    socket.on('submission', async (submission, position, user_id, story_id) => {
+        console.log(`Recieved submission of ${submission} at position ${position} from user ${user_id} in story ${story_id}`);
         let submissionArray = submission.split(' ');
         try {
             //Updates the position of every of word in the story after the submission position, by an amount equal to the # of words inserted, 
-            let updatedSubmissionData = await Submission.update({
-                position: this.position+submissionArray.length
-            }, 
-            {
+            const incrementPosition = await Submission.increment({ position: 1 }, {
                 where: {
-                    position: {
-                        [OP.gte]: position
+                    position: { [Op.gte]: position }
+                }
+            });
+            await Submission.update({
+                position: this.position + submissionArray.length
+            },
+                {
+                    where: {
+                        position: {
+                            [OP.gte]: position
+                        }
                     }
-                }
-            })
-            console.log(updatedSubmissionData);
-            //Identifies the user
-            const user = await User.findOne({
-                where: {
-                    name: username
-                }
-            })
-            const user_id = user.id
+                })
             //For each word in the submission, creates a new table entry and an appropriate position
-            for (let word of submissionArray) {
-                await Submission.create(word, position, user_id)
-                position++
-            }
             const story = await Story.findOne({
                 where: {
                     storyname: storyname
                 }
             })
-            //Add code to turn submission table into full story
-
-const testData = await Submission.findAll()
-io.emit('testEvent', testData)
+            for (let word of submissionArray) {
+                const submissionData = await Submission.create({ word, position, user_id, story_id });
+            }
+            
+            const testData = await Submission.findAll()
+            io.emit('testEvent', testData)
 
             // io.emit('displayStory', storyString)
         } catch (err) {
             io.emit('error', err)
         };
     });
-//Takes in the position of the word deleted and adjusts the database accordingly.
+    //Takes in the position of the word deleted and adjusts the database accordingly.
     socket.on('deletion', async (word_id) => {
         console.log(`Delete word ${word_id}`)
-       try {
+        try {
             const positionData = await Submission.findOne({
                 attributes: ['position'],
                 where: { id: word_id }
@@ -166,8 +161,8 @@ io.emit('testEvent', testData)
                 }
             });
 
-           const testData = await Submission.findAll()
-           io.emit('testEvent', testData)
+            const testData = await Submission.findAll()
+            io.emit('testEvent', testData)
 
             // io.emit('displayStory', storyString)
         } catch (err) {
@@ -177,6 +172,6 @@ io.emit('testEvent', testData)
 });
 
 // Sync database and start listening
-sequelize.sync({force: false}).then(() => httpServer.listen(PORT, ()=>{
+sequelize.sync({ force: false }).then(() => httpServer.listen(PORT, () => {
     console.log(`Now listening to port ${PORT}`)
 }));

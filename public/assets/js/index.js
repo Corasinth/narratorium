@@ -20,13 +20,13 @@ socket.on('testEvent', (data) => {
 })
 
 //Call this function when a user makes a submission
-function onSubmit (submissionText, position, user, story) {
-    socket.emit('submission', submissionText, position, user, story)
+function onSubmit (submissionText, position, user_id, story_id) {
+    socket.emit('submission', submissionText, position, user_id, story_id)
 }
 
 //Call this function when a user deletes a word
-function onDelete (wordDeleted, word_id) {
-    socket.emit('deletion', wordDeleted, position, story)
+function onDelete (word_id) {
+    socket.emit('deletion', word_id)
 }
 
 //Call this function when the user navigates to a story
