@@ -30,6 +30,8 @@ function onSubmit(submissionText, position, user_id, story_id) {
     socket.emit('submission', submissionText, position, user_id, story_id, (response) => {
         if (response === true) {
            //Code to decrement character counter by submissionText.length 
+        } else {
+            console.log(response);
         }
     })
 }
@@ -40,6 +42,8 @@ function onDelete(word_id) {
     socket.emit('deletion', word_id, user_id, (response) => {
         if (response === true) {
             //Code to decrement frontend delete counter by 1 
+        } else {
+            console.log(response);
         }
     })
 
