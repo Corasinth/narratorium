@@ -25,8 +25,9 @@ router.get("/signup", (req, res) => {
 });
 
 // "/story" get route for story page
-router.get("/story", async (req, res) => {
-  if(req.session.loggedIn) {
+
+router.get("/story", (req, res) => {
+  if(!req.session.loggedIn) {
     res.redirect("/login");
   } else {
     // Get the story data to display story name on page

@@ -28,7 +28,8 @@
     "express-session": "^1.17.3",
     "mysql2": "^2.2.5",
     "sequelize": "^6.21.3",
-    "socket.io": "^4.5.1"
+    "socket.io": "^4.5.1",
+    "socket.io-client": "^4.5.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
