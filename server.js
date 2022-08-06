@@ -143,7 +143,7 @@ io.on("connection", async (socket) => {
         };
     });
     //Takes in the position of the word deleted and adjusts the database accordingly.
-    socket.on('deletion', async (word_id) => {
+    socket.on('deletion', async (word_id, user_id, response) => {
         console.log(`Delete word ${word_id}`)
         try {
             const positionData = await Submission.findOne({
@@ -176,9 +176,21 @@ io.on("connection", async (socket) => {
                     order: [['position', 'ASC']]
                 }],
             });
+            
+            await User.decrement('delete_limit', {
+                by: 1,
+                where: {
+                    id:user_id
+                }
+            });
             io.emit('displayStory', storyData)
+            response({
+                status: true
+            })
         } catch (err) {
-            io.emit('error', err)
+            response({
+                status: err
+            })
         };
     })
 });
