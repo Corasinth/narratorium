@@ -57,8 +57,12 @@ function addStory(storyName) {
 
 //When we open the page or login, this function runs to get our current characters stat and our current delete stat
 async function onLogin () {
-    let numOfCharacters = fetch('/api/users/characterlimit')
-    let numOfDeletes = fetch('/api/users/deletelimit')
-    let limitArr = await Promise.all([numOfCharacters, numOfDeletes])
-    console.log(`We have ${limitArr[0]} characters left to type and ${limitArr[1]} left to type.`)
+    const body = document.querySelector('body')
+    const response = await fetch (`/api/users/${body.dataset.user_id}`)
+    const userData = await response.json()
+    console.log('the user data', userData)
+    let numOfCharacters = userData.character_limit;
+    let numOfDeletes = userData.delete_limit; 
+    //TODO Code to set counters on HTML goes here! 
+    console.log(`We have ${numOfCharacters} characters left to type and ${numOfDeletes} left to delete.`)
 }

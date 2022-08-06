@@ -38,16 +38,16 @@ User.init(
       },
     },
     //Characters you can add 
-    characterLimit: {
+    character_limit: {
       type:DataTypes.INTEGER,
       allowNull: false,
     },
     // Words you can delete 
-    deleteLimit: {
+    delete_limit: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    lastLoggedIn: {
+    last_logged_in: {
       type: DataTypes.DATE,
     }
   },

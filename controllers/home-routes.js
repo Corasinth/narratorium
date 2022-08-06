@@ -3,7 +3,7 @@ const {User, Story, Submission} = require("../models");
 
 // "/" get route for homepage
 router.get("/", (req, res) => {
-  res.render("homepage", {loggedIn: req.session.loggedIn});
+  res.render("homepage", {loggedIn: req.session.loggedIn, session: req.session});
 });
 
 // "/login" get route for login page
@@ -29,7 +29,7 @@ router.get("/story", (req, res) => {
   if(!req.session.loggedIn) {
     res.redirect("/login");
   } else {
-    res.render("storypage", {loggedIn: req.session.loggedIn});
+    res.render("storypage", {loggedIn: req.session.loggedIn, session: req.session});
   }
 });
 
