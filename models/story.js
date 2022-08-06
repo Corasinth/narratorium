@@ -14,6 +14,7 @@ Story.init(
     storyname: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true
     }
   },
   {
