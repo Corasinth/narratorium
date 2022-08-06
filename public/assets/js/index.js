@@ -20,18 +20,23 @@ socket.on('error', (error) => {
     console.log(error)
 })
 
-socket.on('testEvent', (data) => {
-    console.table(data)
-})
-
 //Call this function when a user makes a submission
 function onSubmit(submissionText, position, user_id, story_id) {
-    socket.emit('submission', submissionText, position, user_id, story_id)
+    socket.emit('submission', submissionText, position, user_id, story_id, (response) => {
+        if (response === true) {
+           //Code to decrement character counter by submissionText.length 
+        }
+    })
 }
 
 //Call this function when a user deletes a word
 function onDelete(word_id) {
-    socket.emit('deletion', word_id)
+    socket.emit('deletion', word_id, (response) => {
+        if (response === true) {
+            //Code to decrement frontend delete counter by 1 
+        }
+    })
+
 }
 
 //Call this function when the user navigates to a story
@@ -47,7 +52,7 @@ function renameStory(newName, story_id) {
     })
 }
 
-//Call this function when the user renames a story
+//Call this function when the user adds a story
 function addStory(storyName) {
     socket.emit('addStory', storyName, (response) => {
         //Function for adding a new story, place any relevant HTML changes here
