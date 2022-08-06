@@ -57,7 +57,7 @@ io.on("connection", async (socket) => {
     console.log(socket.id)
     socket.on('viewStory', async (story_id) => {
         try {
-            const storyData = await Story.findByPk(req.params.id, {
+            const storyData = await Story.findByPk(story_id, {
                 include: [{
                     model: Submission,
                     separate: true,
@@ -75,6 +75,16 @@ io.on("connection", async (socket) => {
         }
     })
     //Takes in title and creates a new story
+    socket.on('addStory', async (storyName) => {
+        try{
+            const storyData = await Story.create(storyName);
+            response({
+                status: storyData
+            })
+        } catch (err) {
+            io.emit('error', err)
+        }
+    })
     //Takes in story_id and renames the story title 
     socket.on('renameStory', async (newName, story_id, response) => {
         try {
@@ -103,35 +113,22 @@ io.on("connection", async (socket) => {
         let submissionArray = submission.split(' ');
         try {
             //Updates the position of every of word in the story after the submission position, by an amount equal to the # of words inserted, 
-            const incrementPosition = await Submission.increment({ position: 1 }, {
+            const incrementPosition = await Submission.increment({ position: submissionArray.length }, {
                 where: {
                     position: { [Op.gte]: position }
                 }
             });
-            await Submission.update({
-                position: this.position + submissionArray.length
-            },
-                {
-                    where: {
-                        position: {
-                            [OP.gte]: position
-                        }
-                    }
-                })
             //For each word in the submission, creates a new table entry and an appropriate position
-            const story = await Story.findOne({
-                where: {
-                    storyname: storyname
-                }
-            })
-            for (let word of submissionArray) {
-                const submissionData = await Submission.create({ word, position, user_id, story_id });
+            for (let content of submissionArray) {
+                //Check that the create parameters are correct
+                const submissionData = await Submission.create({ content, position, user_id, story_id });
+                position++
             }
             
             const testData = await Submission.findAll()
             io.emit('testEvent', testData)
 
-            // io.emit('displayStory', storyString)
+            // io.emit('displayStory', something)
         } catch (err) {
             io.emit('error', err)
         };
@@ -153,7 +150,7 @@ io.on("connection", async (socket) => {
             });
 
             if (!submissionData) {
-                //Error handling
+                //TODO Error handling
             }
 
             const incrementPosition = await Submission.increment('position', {
