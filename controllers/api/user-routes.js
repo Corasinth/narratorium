@@ -114,5 +114,26 @@ router.post("/logout", (req, res) => {
   }
 })
 
+// "/characterlimit"
+router.get('characterlimit', (req, res) => {
+  try {
+  if (req.session.loggedIn) {
+    console.log(req.session)    
+  }
+} catch (err) {
+  res.status(400).json(err)
+}
+})
+
+// "/deletelimit"
+router.get('deletelimit', (req, res) => {
+  try {
+  if (req.session.loggedIn) {
+    console.log(req.session)    
+  }
+} catch (err) {
+  res.status(400).json(err)
+}
+})
 
 module.exports = router;
