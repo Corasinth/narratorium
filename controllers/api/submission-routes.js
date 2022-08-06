@@ -98,17 +98,45 @@ router.put("/:id", async (req, res) => {
 
 
 // "/" delete remove a submission
-router.delete("/:id", async (req, res) => {
-  try {
-    const positionData = await Submission.findOne({
-      attributes: ['position'],
-      where: {id: req.params.id}
-    });
-    const position = positionData.get({plain: true}).position;
+// router.delete("/:id", async (req, res) => {
+//   try {
+//     const positionData = await Submission.findOne({
+//       attributes: ['position'],
+//       where: {id: req.params.id}
+//     });
+//     const position = positionData.get({plain: true}).position;
 
+//     const submissionData = await Submission.destroy({
+//       where: {
+//         id: req.params.id
+//       }
+//     });
+
+//     if(!submissionData) {
+//       res.status(400).json({message: "No submission found with that id"});
+//       return;
+//     }
+
+//     const incrementPosition = await Submission.increment('position', {
+//       by: -1,
+//       where: {
+//         position: {[Op.gt]: position}
+//       }
+//     });
+
+//     res.status(200).json(submissionData);
+  
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// });
+
+// delete a submission by position
+router.delete("/:position", async (req, res) => {
+  try {
     const submissionData = await Submission.destroy({
       where: {
-        id: req.params.id
+        position: req.params.position
       }
     });
 
@@ -120,16 +148,14 @@ router.delete("/:id", async (req, res) => {
     const incrementPosition = await Submission.increment('position', {
       by: -1,
       where: {
-        position: {[Op.gt]: position}
+        position: {[Op.gt]: req.params.position}
       }
     });
-
     res.status(200).json(submissionData);
-  
   } catch (error) {
     res.status(500).json(error);
   }
-});
+})
 
 
 
