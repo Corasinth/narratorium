@@ -8,11 +8,12 @@ socket.on('connect', () => {
 
 socket.on('displayStory', (data) => {
     //Displays story from database on page
-    let storyString;
+    let storyString = "";
     for (let entries of data.submissions) {
         storyString += `${entries.submission} `
     }
-    console.log(storyString)
+    console.log(storyString);
+    console.log(data);
 })
 
 socket.on('error', (error) => {
@@ -31,8 +32,8 @@ function onSubmit(submissionText, position, user_id, story_id) {
 }
 
 //Call this function when a user deletes a word
-function onDelete(word_id) {
-    socket.emit('deletion', word_id)
+function onDelete(word_position) {
+    socket.emit('deletion', word_position)
 }
 
 //Call this function when the user navigates to a story

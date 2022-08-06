@@ -56,7 +56,6 @@ app.use(routes);
 // Set up sockets
 io.on("connection", async (socket) => {
     console.log(socket.id)
-    let storyString = ""
     socket.on('viewStory', async (story_id) => {
         try {
             const storyData = await Story.findByPk(story_id, {
@@ -143,18 +142,12 @@ io.on("connection", async (socket) => {
         };
     });
     //Takes in the position of the word deleted and adjusts the database accordingly.
-    socket.on('deletion', async (word_id) => {
-        console.log(`Delete word ${word_id}`)
+    socket.on('deletion', async (position) => {
+        console.log(`Delete word at position ${position}`)
         try {
-            const positionData = await Submission.findOne({
-                attributes: ['position'],
-                where: { id: word_id }
-            });
-            const position = positionData.get({ plain: true }).position;
-
             const submissionData = await Submission.destroy({
                 where: {
-                    id: word_id
+                    position: position
                 }
             });
 
@@ -169,15 +162,8 @@ io.on("connection", async (socket) => {
                 }
             });
 
-            const storyData = await Story.findByPk(story_id, {
-                include: [{
-                    model: Submission,
-                    separate: true,
-                    order: [['position', 'ASC']]
-                }],
-            });
-            io.emit('displayStory', storyData)
         } catch (err) {
+            console.log(err);
             io.emit('error', err)
         };
     })
