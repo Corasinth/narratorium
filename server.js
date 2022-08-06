@@ -15,6 +15,7 @@ const { Op } = require("sequelize");
 //Import models 
 const { User, Story, Submission } = require('./models/index');
 const { findByPk } = require("./models/user");
+const { response } = require("express");
 
 // Initialize packages
 const app = express();
@@ -123,6 +124,13 @@ io.on("connection", async (socket) => {
                     position: { [Op.gte]: position }
                 }
             });
+            //Updates the users daily limit to ensure database is up to date
+            await User.decrement('character_limit', {
+                by: submission.length,
+                where: {
+                    id:user_id
+                }
+            });
             //For each word in the submission, creates a new table entry and an appropriate position
             for (let submission of submissionArray) {
                 //Check that the create parameters are correct
@@ -137,9 +145,13 @@ io.on("connection", async (socket) => {
                 }],
             });
             io.emit('displayStory', storyData)
+            response ({
+                status: true
+            })
         } catch (err) {
-            console.log(err)
-            io.emit('error', err)
+            response({
+                status:err
+            })
         };
     });
     //Takes in the position of the word deleted and adjusts the database accordingly.
