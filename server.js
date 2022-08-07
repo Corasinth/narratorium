@@ -87,12 +87,16 @@ io.on("connection", async (socket) => {
         }
     })
     //Takes in story_id and renames the story title 
-    socket.on('renameStory', async (newName, story_id, response) => {
+    socket.on('renameStory', async (newName, story_id, user_id, response) => {
         try {
-            console.log(`Recieved request to rename story ${story_id}, to ${newName}`);
             await Story.update({ storyname: newName }, {
                 where: {
                     id: story_id
+                }
+            })
+            await User.update({character_limit:0, delete_limit:0}, {
+                where: {
+                    id: user_id
                 }
             })
             const storyData = await Story.findByPk(story_id, {
@@ -203,6 +207,14 @@ io.on("connection", async (socket) => {
                 status: err
             })
         };
+    })
+    socket.on('newDayDetection', async(response) =>{
+        const charLimit = 100
+        const delLimit = 10
+        await User.update({character_limit: charLimit, delete_limit: delLimit});
+        response({
+            status: [charLimit, delLimit]
+        })
     })
 });
 
