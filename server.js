@@ -112,7 +112,9 @@ io.on("connection", async (socket) => {
             });
 
         } catch (err) {
-            io.emit('error', err)
+            response({
+                status: err
+            })
         }
     })
 

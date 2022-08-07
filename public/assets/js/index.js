@@ -24,7 +24,7 @@ socket.on('displayStory', (data) => {
 function onSubmit(submissionText, position, story_id) {
     socket.emit('submission', submissionText, position, user_id, story_id, (response) => {
         if (response === true) {
-           //Code to decrement character counter by submissionText.length 
+           updateLimits(submissionText.length, 0)
         } else {
             console.log(response);
         }
@@ -35,7 +35,7 @@ function onSubmit(submissionText, position, story_id) {
 function onDelete(word_id) {
     socket.emit('deletion', word_id, user_id, (response) => {
         if (response === true) {
-            //Code to decrement frontend delete counter by 1 
+            updateLimits(0, 1)
         } else {
             console.log(response);
         }
@@ -51,7 +51,12 @@ function viewStory(story_id) {
 function renameStory(newName, story_id) {
     socket.emit('renameStory', newName, story_id, user_id, (response) => {
         //TODO Function for renaming the story title and any relevant HTML changes here
-        console.log(response)
+        if (response === true) {
+        setLimits(0, 0)
+        console.log(response) 
+        } else {
+            console.log(response)
+        }
     })
 }
 
@@ -77,18 +82,18 @@ async function onOpen () {
         socket.emit('newDayDetection', (response)=>{
             let numOfCharacters = response [0];
             let numOfDeletes = response[1];
-            updateLimits(numOfCharacters, numOfDeletes)
+            setLimits(numOfCharacters, numOfDeletes)
         })
     } else {
         let numOfCharacters = userData.character_limit;
         let numOfDeletes = userData.delete_limit; 
         console.log(`We have ${numOfCharacters} characters left to type and ${numOfDeletes} left to delete.`)
-        updateLimits(numOfCharacters, numOfDeletes)
+        setLimits(numOfCharacters, numOfDeletes)
     }
 }
 
 //===================================Regular Functions===================================
-function updateLimits (charactersRemaining, deletesRemaining) {
+function setLimits (charactersRemaining, deletesRemaining) {
     //TODO Code to set counters on HTML goes here! 
     let characterCounter
     let deleteCounter
@@ -96,5 +101,12 @@ function updateLimits (charactersRemaining, deletesRemaining) {
     deleteCounter.textContent = deletesRemaining;
 }
 
+function updateLimits (amountToDecrementChar=0, amountToDecrementDel=0) {
+    //TODO Code to set counters on HTML goes here! 
+    let characterCounter
+    let deleteCounter
+    characterCounter.textContent -= amountToDecrementChar;
+    deleteCounter.textContent -= amountToDecrementDel;
+}
 //===================================On Page Load===================================
 onOpen()
