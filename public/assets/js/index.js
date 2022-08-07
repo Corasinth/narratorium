@@ -20,9 +20,8 @@ socket.on('displayStory', (data) => {
     console.log(storyString)
 })
 
-socket.on('error', (error) => {
-    console.log(`%c Server returned the following error: ${error}`, 'color:red;font-weight:500')
-    console.log(error)
+socket.on('resetLimits', (characterLimit, deleteLimit) => {
+    //Code to update HTML limit counters
 })
 
 //Call this function when a user makes a submission
@@ -74,9 +73,13 @@ function addStory(storyName) {
 async function onLogin () {
     const response = await fetch (`/api/users/${user_id}`)
     const userData = await response.json()
-    console.log('the user data', userData)
     let numOfCharacters = userData.character_limit;
     let numOfDeletes = userData.delete_limit; 
+    let currentDate = new Date(Date.now()).toISOString();
+    let currentDay = currentDate[8] + currentDate[9] 
     //TODO Code to set counters on HTML goes here! 
     console.log(`We have ${numOfCharacters} characters left to type and ${numOfDeletes} left to delete.`)
+    if(`${userData.last_logged_in[8]}${userData.last_logged_in[9]}` < currentDay) {
+        socket.emit('newDayDetection')
+    }
 }

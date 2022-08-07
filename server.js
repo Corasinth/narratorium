@@ -57,7 +57,6 @@ app.use(routes);
 // Set up sockets
 io.on("connection", async (socket) => {
     console.log(socket.id)
-    let storyString = ""
     socket.on('viewStory', async (story_id) => {
         try {
             const storyData = await Story.findByPk(story_id, {
