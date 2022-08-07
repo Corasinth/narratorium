@@ -39,7 +39,7 @@ router.get("/story", (req, res) => {
     // const submissionData = await Submission.findAll();
     // const submission = submissionData.map((sub) =>
       sub.get({ plain: true })
-    );
+    // );
     // console.info("Got submissions! " + submission);
     // submission.forEach(sub => console.info(sub.submission));   
 
