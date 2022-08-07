@@ -161,15 +161,9 @@ io.on("connection", async (socket) => {
     socket.on('deletion', async (word_id, user_id, response) => {
         console.log(`Delete word ${word_id}`)
         try {
-            const positionData = await Submission.findOne({
-                attributes: ['position'],
-                where: { id: word_id }
-            });
-            const position = positionData.get({ plain: true }).position;
-
             const submissionData = await Submission.destroy({
                 where: {
-                    id: word_id
+                    position: position
                 }
             });
 

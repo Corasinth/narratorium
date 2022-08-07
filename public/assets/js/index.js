@@ -13,11 +13,12 @@ socket.on('connect', () => {
 
 socket.on('displayStory', (data) => {
     //Displays story from database on page
-    let storyString;
+    let storyString = "";
     for (let entries of data.submissions) {
         storyString += `${entries.submission} `
     }
-    console.log(storyString)
+    console.log(storyString);
+    console.log(data);
 })
 
 //Call this function when a user makes a submission
