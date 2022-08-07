@@ -15,6 +15,7 @@ const { Op } = require("sequelize");
 //Import models 
 const { User, Story, Submission } = require('./models/index');
 const { findByPk } = require("./models/user");
+const { response } = require("express");
 
 // Initialize packages
 const app = express();
@@ -86,12 +87,16 @@ io.on("connection", async (socket) => {
         }
     })
     //Takes in story_id and renames the story title 
-    socket.on('renameStory', async (newName, story_id, response) => {
+    socket.on('renameStory', async (newName, story_id, user_id, response) => {
         try {
-            console.log(`Recieved request to rename story ${story_id}, to ${newName}`);
             await Story.update({ storyname: newName }, {
                 where: {
                     id: story_id
+                }
+            })
+            await User.update({character_limit:0, delete_limit:0}, {
+                where: {
+                    id: user_id
                 }
             })
             const storyData = await Story.findByPk(story_id, {
@@ -107,7 +112,9 @@ io.on("connection", async (socket) => {
             });
 
         } catch (err) {
-            io.emit('error', err)
+            response({
+                status: err
+            })
         }
     })
 
@@ -120,6 +127,13 @@ io.on("connection", async (socket) => {
             const incrementPosition = await Submission.increment({ position: submissionArray.length }, {
                 where: {
                     position: { [Op.gte]: position }
+                }
+            });
+            //Updates the users daily limit to ensure database is up to date
+            await User.decrement('character_limit', {
+                by: submission.length,
+                where: {
+                    id:user_id
                 }
             });
             //For each word in the submission, creates a new table entry and an appropriate position
@@ -136,14 +150,18 @@ io.on("connection", async (socket) => {
                 }],
             });
             io.emit('displayStory', storyData)
+            response ({
+                status: true
+            })
         } catch (err) {
-            console.log(err)
-            io.emit('error', err)
+            response({
+                status:err
+            })
         };
     });
     //Takes in the position of the word deleted and adjusts the database accordingly.
-    socket.on('deletion', async (position) => {
-        console.log(`Delete word at position ${position}`)
+    socket.on('deletion', async (word_id, user_id, response) => {
+        console.log(`Delete word ${word_id}`)
         try {
             const submissionData = await Submission.destroy({
                 where: {
@@ -162,10 +180,37 @@ io.on("connection", async (socket) => {
                 }
             });
 
+            const storyData = await Story.findByPk(story_id, {
+                include: [{
+                    model: Submission,
+                    separate: true,
+                    order: [['position', 'ASC']]
+                }],
+            });
+            
+            await User.decrement('delete_limit', {
+                by: 1,
+                where: {
+                    id:user_id
+                }
+            });
+            io.emit('displayStory', storyData)
+            response({
+                status: true
+            })
         } catch (err) {
-            console.log(err);
-            io.emit('error', err)
+            response({
+                status: err
+            })
         };
+    })
+    socket.on('newDayDetection', async(response) =>{
+        const charLimit = 100
+        const delLimit = 10
+        await User.update({character_limit: charLimit, delete_limit: delLimit});
+        response({
+            status: [charLimit, delLimit]
+        })
     })
 });
 

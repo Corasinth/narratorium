@@ -2,6 +2,21 @@ const router = require("express").Router();
 const {User, Story, Submission} = require("../../models");
 const { Op } = require("sequelize");
 
+// "/characterlimit"
+router.get('/characterlimit', async (req, res) => {
+  console.log('testing1')
+  try {
+  if (req.session.loggedIn) {
+    let user_id = req.session.user_id   
+    userData = await User.findByPk(user_id)
+    res.status(200).json(userData)
+  }
+} catch (err) {
+  console.log(err)
+  res.status(400).json(err)
+}
+})
+
 // "/" get all users
 router.get("/", async (req, res) => {
   try {

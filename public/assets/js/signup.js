@@ -15,9 +15,11 @@ const signupHandler = async (e) => {
   }
 
   if(username && email && password && confirmPassword) {
+    const currentDate = Date.now()
+    console.log(currentDate)
     const res = await fetch("/api/users/", {
       method: "POST",
-      body: JSON.stringify({username, email, password}),
+      body: JSON.stringify({username, email, password, character_limit:100, delete_limit:10, last_logged_in:currentDate}),
       headers: {"Content-Type": "application/json"}
     });
     console.log(res);
@@ -26,7 +28,7 @@ const signupHandler = async (e) => {
       document.location.replace("/");
     } else {
       const body = await res.json();
-
+      console.log(body)
       if(body.name === "SequelizeUniqueConstraintError") {
         status.innerHTML = `
         <div>

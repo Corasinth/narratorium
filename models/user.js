@@ -37,6 +37,19 @@ User.init(
         len: [8],
       },
     },
+    //Characters you can add 
+    character_limit: {
+      type:DataTypes.INTEGER,
+      allowNull: false,
+    },
+    // Words you can delete 
+    delete_limit: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    last_logged_in: {
+      type: DataTypes.DATE,
+    }
   },
   {
     hooks: {
