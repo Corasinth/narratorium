@@ -26,7 +26,7 @@ router.get("/signup", (req, res) => {
 
 // "/story" get route for story page
 
-router.get("/story", (req, res) => {
+router.get("/story", async (req, res) => {
   if(!req.session.loggedIn) {
     res.redirect("/login");
   } else {
