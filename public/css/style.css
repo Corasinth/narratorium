@@ -24,7 +24,7 @@ a {
 .navbar-title,
 .navbar-link {
     text-transform: uppercase;
-    font-size: 11px;
+    font-size: 1em;
     font-weight: 600;
     letter-spacing: .2rem;
     margin-right: 35px;
@@ -49,6 +49,25 @@ h2 {
 .align-center {
     text-align: center;
 }
+
+/* #navbar-section-1 {
+    display: flex;
+    flex-wrap: row;
+    justify-content: start;
+    padding: 2em;
+}
+
+#navbar-section-2 {
+    display: flex;
+    flex-wrap: row;
+    justify-content: end;
+    padding: 2em;
+} */
+
+.align-right {
+    text-align: right;
+    margin-left: 70%;
+    padding: 15px;
 
 /* Quill Div */
 #quillContainer,
