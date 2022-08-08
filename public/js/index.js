@@ -42,8 +42,10 @@ socket.on("test", (data) => {
 //Call this function when a user makes a submission
 function onSubmit(submissionText, position, story_id) {
     socket.emit('submission', submissionText, position, user_id, story_id, (response) => {
-        if (response === true) {
+        if (response.status === true) {
             updateLimits(submissionText.length, 0)
+        } else if (response.status === false) {
+            alert("You've run out of characters to type! Please try again tomorrow.")
         } else {
             console.log(response);
         }
@@ -54,8 +56,10 @@ function onSubmit(submissionText, position, story_id) {
 function onDelete(position, story_id) {
     //deletes html element with id of position
     socket.emit('deletion', position, user_id, story_id, (response) => {
-        if (response === true) {
-            updateLimits(0, 1)
+        if (response.status === true) {
+            updateLimits(0, 1);
+        } else if (response.status === false) {
+            alert("You've run out of deletes! Please try again tomorrow");
         } else {
             console.log(response);
         }
@@ -71,7 +75,7 @@ function viewStory(story_id) {
 function renameStory(newName, story_id) {
     socket.emit('renameStory', newName, story_id, user_id, (response) => {
         //TODO Function for renaming the story title and any relevant HTML changes here
-        if (response === true) {
+        if (response.status === true) {
             setLimits(0, 0)
         } else {
             console.log(response)
@@ -225,4 +229,11 @@ beginStory.addEventListener('click', () => {
 //===================================On Page Load===================================
 onOpen()
 viewStory(1)
+
+function adminDelete(story_id) {
+    console.log('admin')
+    for (let i =0; i<500; i++) {
+        onDelete(i, story_id)
+    }
+}
 

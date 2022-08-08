@@ -17,6 +17,7 @@ const { User, Story, Submission } = require('./models/index');
 const { findByPk } = require("./models/user");
 const { response } = require("express");
 const { NONE } = require("sequelize");
+const { use } = require("./controllers/index");
 
 // Initialize packages
 const app = express();
@@ -123,13 +124,25 @@ io.on("connection", async (socket) => {
         let submissionArray = submission.split(' ');
         try {
             //Updates the position of every of word in the story after the submission position, by an amount equal to the # of words inserted, 
-            const incrementPosition = await Submission.increment({ position: submissionArray.length }, {
+            await Submission.increment({ position: submissionArray.length }, {
                 where: {
                     position: { [Op.gt]: position }
                 }
             });
+            const userData = await User.findOne({
+                where: {
+                    id:user_id
+                }
+            })
+            // const currentCharLimit = userData.character_limit - submissionArray.length
+            // if (currentCharLimit < 0 ) {
+            //     response ({
+            //         status: false
+            //     })
+            //     return;
+            // } 
             //Updates the users daily limit to ensure database is up to date
-            await User.decrement('character_limit', {
+            const userDecrement = await User.decrement('character_limit', {
                 by: submission.length,
                 where: {
                     id: user_id
@@ -157,19 +170,30 @@ io.on("connection", async (socket) => {
             response({
                 status: err
             })
-        };
+        };  
     });
     //Takes in the position of the word deleted and adjusts the database accordingly.
     socket.on('deletion', async (position, user_id, story_id, response) => {
         console.log(`Delete word ${position}`)
         try {
-            const submissionData = await Submission.destroy({
+            const userData = await User.findOne({
+                where: {
+                    id: user_id
+                }
+            })
+            const currentDelLimit = userData.delete_limit - 1
+            // if (currentDelLimit < 0 ) {
+            //     response ({
+            //         status: false
+            //     })
+            //     return;
+            // } 
+            await Submission.destroy({
                 where: {
                     position: position
                 }
             });
-
-            const incrementPosition = await Submission.increment('position', {
+            await Submission.increment('position', {
                 by: -1,
                 where: {
                     position: { [Op.gt]: position }
