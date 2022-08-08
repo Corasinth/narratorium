@@ -84,8 +84,8 @@ async function onOpen() {
     const userData = await response.json()
     let currentDate = new Date(Date.now()).toISOString();
     let currentDay = currentDate[8] + currentDate[9]
-    if (`${userData.last_logged_in[8]}${userData.last_logged_in[9]}` < currentDay) {
-        socket.emit('newDayDetection', (response) => {
+    if (userData.last_logged_in === null || `${userData.last_logged_in[8]}${userData.last_logged_in[9]}` < currentDay) {
+        socket.emit('newDayDetection', currentDate, (response) => {
             let numOfCharacters = response[0];
             let numOfDeletes = response[1];
             setLimits(numOfCharacters, numOfDeletes)
