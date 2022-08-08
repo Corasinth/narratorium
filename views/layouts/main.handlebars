@@ -19,7 +19,11 @@
     {{!-- Navbar --}}
     <header class="container navbar">
         <ul class="navbar-list">
+            <div id="navbar-section-1">
+            {{!-- Icon Goes Here --}}
             <li class="navbar-item navbar-title">Narratorium</li>
+            </div>
+            <div id="navbar-section-2">
             {{!-- Links to login and signup page --}}
             {{#if loggedIn}}
             <li class="navbar-item" id="logout"><button>Logout</button></li>
@@ -27,6 +31,7 @@
             <li class="navbar-item"><a class="navbar-link" href="/login">Login</a></li>
             <li class="navbar-item"><a class="navbar-link" href="/signup">Signup</a></li>
             {{/if}}
+            </div>
         </ul>
     </header>
     {{{body}}}
