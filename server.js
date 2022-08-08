@@ -16,6 +16,7 @@ const { Op } = require("sequelize");
 const { User, Story, Submission } = require('./models/index');
 const { findByPk } = require("./models/user");
 const { response } = require("express");
+const { NONE } = require("sequelize");
 
 // Initialize packages
 const app = express();
@@ -35,7 +36,7 @@ const sess = {
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 900000
+        maxAge: 900000,
     },
     store: new SequelizeStore({ db: sequelize })
 };
@@ -66,9 +67,6 @@ io.on("connection", async (socket) => {
                     order: [['position', 'ASC']]
                 }],
             });
-            console.log(storyData.submissions)
-            // const testData = await Submission.findAll()
-            // io.emit('testEvent', testData)
             io.emit('displayStory', storyData)
         } catch (err) {
             io.emit('error', err)

@@ -32,6 +32,18 @@
     position: sticky; 
 }
 
+#navbar-section-1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+#navbar-section-2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
 .navbar-list {
     list-style: none;
     margin-bottom: 0; 
@@ -46,7 +58,8 @@
     margin-bottom: 0; 
 }
 
-.navbar-title {
+.navbar-title,
+.navbar-link {
     text-transform: uppercase;
     font-size: 11px;
     font-weight: 600;
@@ -57,15 +70,8 @@
     color: #222; 
 }
 
-.navbar-link {
-    text-transform: uppercase;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .2rem;
-    margin-right: 35px;
-    text-decoration: none;
-    line-height: 6.5rem;
-    color: #222; 
+#logout {
+    margin: 1em;
 }
 
 /* ============== ALIGNMENT ============== */
@@ -95,8 +101,34 @@ h1, h2 {
     margin-top: 15px;
     margin-bottom: 15px;
     color: #222; 
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: .2rem;
+    text-decoration: none;
 }
 
 a {
     text-decoration: none;
+}
+
+/* ============== EDITOR ============== */
+#quillContainer {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: white;
+}
+
+
+/* ============== STORY ============== */
+#story{
+    margin: 5em;
+}
+
+/* ============== STORY ============== */
+footer {
+    display: flex;
+    flex-wrap: row;
+    justify-content: space-around;
+    background-color: rgb(156, 156, 156);
 }
