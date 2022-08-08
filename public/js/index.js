@@ -204,6 +204,7 @@ const submitBtn = document.getElementById('submit')
 submitBtn.addEventListener('click', function (e) {
     e.stopImmediatePropagation()
     document.getElementById('quillContainer').setAttribute('style', 'display:none;')
+    document.getElementById('editBtns').style.display = 'none';
     createSubmits()
 })
 
@@ -218,6 +219,7 @@ deleteBtn.addEventListener('click', () => {
 const beginStory = document.getElementById('beginStory')
 beginStory.addEventListener('click', () => {
     document.getElementById('quillContainer').setAttribute('style', 'display:block;')
+    document.getElementById('editBtns').style.display = 'block';
 })
 
 //===================================On Page Load===================================

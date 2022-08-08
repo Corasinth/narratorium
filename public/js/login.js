@@ -22,6 +22,8 @@ const loginHandler = async (e) => {
     </div>`
     }
   }
+  document.getElementById('submit').disabled = false;
+  document.getElementById('delete').disabled = false;
 }
 
 document.querySelector('#login-form').addEventListener('click', loginHandler);
