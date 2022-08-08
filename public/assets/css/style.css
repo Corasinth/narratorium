@@ -6,6 +6,7 @@
 .div-container {
     margin-left: 5px;
     margin-right: 5px;
+    margin-bottom: 15px;
 }
 
 .body-container {
@@ -16,6 +17,13 @@
 .description-container {
     margin-left: 25%;
     margin-right: 25%;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 /* ============== NAVBAR ============== */
@@ -75,8 +83,8 @@
 .center-btn {
     margin: 0;
     position: absolute;
-    top: 60%;
-    left: 38%;
+    top: 70%;
+    left: 25%;
     -ms-transform: translateY(-50%, -50%);
     transform: translateY(-50%, -50%);
 }
