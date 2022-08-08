@@ -22,11 +22,8 @@ socket.on('displayStory', (data) => {
     let render = []
     for (let i = 0; i < data.submissions.length; i++) {
         let createSubmit = `<span id=${data.submissions[i].position} class="edit">${data.submissions[i].submission} </span>`
-        console.log(createSubmit)
         render.push(createSubmit)
     }
-    console.log(render)
-
     data.submissions.length == 0
         ? beginStory.setAttribute('style', 'display: block')
         : beginStory.setAttribute('style', 'display: none')
@@ -73,7 +70,6 @@ function renameStory(newName, story_id) {
         //TODO Function for renaming the story title and any relevant HTML changes here
         if (response === true) {
             setLimits(0, 0)
-            console.log(response)
         } else {
             console.log(response)
         }
@@ -135,7 +131,6 @@ function renderStoryToHomepage(render) {
 }
 
 function editSubmits(elementId = 1) {
-    console.log('edit submits')
     let editorDataAttribute = document.querySelector("#editor-container")
     editorDataAttribute.setAttribute("data-position", elementId)
 }
@@ -155,9 +150,7 @@ function createSubmits() {
     if (!quill.getContents()) { console.log('no quill contents') }
     const contents = quill.getContents();
     submissions = contentFunc(contents)
-    console.log(submissions)
     const position = document.getElementById('editor-container').getAttribute('data-position')
-    console.log(contents)
     onSubmit(submissions, position, 1)
 };
 
