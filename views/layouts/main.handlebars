@@ -17,31 +17,11 @@
 
   <body data-user_id="{{session.user_id}}">
     
-    {{! Navbar }}
-
-    <header class="navbar row ">
-        <div id="navbar-section-1" class="six columns u-text-center">
-          {{! Icon Goes Here }}
-          <a class="navbar-title">Narratorium</a>
-        </div>
-        <div id="navbar-section-2" class="six columns u-text-center">
-          {{! Links to login and signup page }}
-          {{#if loggedIn}}
-            <a class="" id="logout"><button>Logout</button></a>
-          {{else}}
-            <a class="navbar-link" href="/login">Login</a>
-            <a class="navbar-link" href="/signup">Signup</a>
-          {{/if}}
-        </div>
-    </header>
-
     {{{body}}}
-    <footer>
-      <a class="navbar-link" href="https://github.com/Corasinth/narratorium">Source Code!</a>
-      <a class="navbar-link" href="https://icons8.com">Icon by Icon8</a>
-    </footer>
+
     {{#if loggedIn}}
       <script src="/js/logout.js"></script>
     {{/if}}
+
   </body>
 </html>
