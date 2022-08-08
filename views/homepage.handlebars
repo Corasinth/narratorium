@@ -12,13 +12,19 @@
     <div class="center-btn" id="btn-container">
       <a href="/login" class="button" id="start-btn">Get Started</a>
     </div>
-  {{/if}} --}}
-  <div class="description-container">
-    <p class="align-center">Narratorium is a collaborative story in which each user offers a few words to contribute, whether by editing past segments, deleting a few words or letters here and there, and/ or adding a few words onto the end.
-    </p>
+  {{/if}}
+  <p class="align-center">Narratorium is a collaborative story in which each user offers a few words to contribute, whether by editing past segments, deleting a few words or letters here and there, and/ or adding a few words onto the end.
+  </p>
+
+  <div id="quillContainer">
+    <div class="container" id="editor-container" data-position="0"></div>
   </div>
 
-  <div class="div-container" id="editor-container"></div>
-  <button id="submit">Submit</button>
+  <div id="editBtns">
+    <button id="submit">Submit</button>
+    <button id="delete">Delete</button>
+  </div>
+  <button id="beginStory">Begin Story</button>
+  <h2>{{story.storyname}}</h2>
   <div id="story" class="align-center"></div>
 </div>

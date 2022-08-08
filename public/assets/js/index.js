@@ -19,7 +19,17 @@ socket.on('displayStory', (data) => {
         render.push(createSubmit)
     }
     console.log(render)
+
+    data.submissions.length == 0
+        ? beginStory.setAttribute('style', 'display: block')
+        : beginStory.setAttribute('style', 'display: none')
+
     renderStoryToHomepage(render)
+})
+
+//test function
+socket.on("test", (data) => {
+    console.table(data)
 })
 
 //Call this function when a user makes a submission
@@ -118,27 +128,37 @@ function renderStoryToHomepage(render) {
 }
 
 function editSubmits(elementId) {
-    quill = new Quill('#editor-container', {
-        theme: 'snow'
-    });
-
     let editorDataAttribute = document.querySelector("#editor-container")
     editorDataAttribute.setAttribute("data-position", elementId)
 
-    // hides toolbar
-    document.querySelectorAll('.ql-toolbar').forEach(toolbar => toolbar.setAttribute('style', "display:none;"))
+    const submitBtn = document.getElementById('submit')
 
-    submit.addEventListener('click', function () {
+    submitBtn.addEventListener('click', function (e) {
+        e.stopImmediatePropagation()
+        console.log('test')
+        document.getElementById('quillContainer').setAttribute('style', 'display:none;')
         createSubmits()
     })
 }
 
+document.getElementById('quillContainer').setAttribute('style', 'display:none;')
+
+function newQuill() {
+    quill = new Quill('#editor-container', {
+        theme: 'snow'
+    });
+}
+newQuill()
+
 // Click submit button: grabs Quill content and transforms it into a string, saves content as individual words in the DB (local storage)
 function createSubmits() {
-    if (!quill.getContents()){console.log('no quill contents')}
+    let submissions = '';
+    if (!quill.getContents()) { console.log('no quill contents') }
     const contents = quill.getContents();
-    const submissions = contentFunc(contents)
+    submissions = contentFunc(contents)
+    console.log(submissions)
     const position = document.getElementById('editor-container').getAttribute('data-position')
+    console.log(contents)
     onSubmit(submissions, position, 1)
 };
 
@@ -151,18 +171,32 @@ function contentFunc(object) {
 }
 
 //===================================Event Listeners===================================
+
+let editWord = 0;
 function editEventListener() {
     const edits = Array.from(document.getElementsByClassName('edit'))
     edits.forEach(edit => {
         edit.addEventListener('dblclick', function red(e) {
-            e.stopPropagation()
-            let elementId = e.target.id
+            document.getElementById('quillContainer').setAttribute('style', 'display:block;')
+            editWord = 0
+            const elementId = e.target.id
+            editWord += elementId
             editSubmits(elementId)
         })
     })
-
 }
+// delete button
+const deleteBtn = document.getElementById('delete')
+deleteBtn.addEventListener('click', () => {
+    const elementId = editWord
+    onDelete(elementId, 1)
+})
 
+const beginStory = document.getElementById('beginStory')
+
+beginStory.addEventListener('click', () => {
+     document.getElementById('quillContainer').setAttribute('style', 'display:block;')
+     })
 
 //===================================On Page Load===================================
 onOpen()
