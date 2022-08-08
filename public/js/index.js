@@ -26,10 +26,7 @@ socket.on('displayStory', (data) => {
         let createSubmit = `<span id=${data.submissions[i].position} class="edit">${data.submissions[i].submission} </span>`
         render.push(createSubmit)
     }
-<<<<<<< HEAD:public/js/index.js
-=======
 
->>>>>>> main:public/assets/js/index.js
     data.submissions.length == 0
         ? beginStory.setAttribute('style', 'display: block')
         : beginStory.setAttribute('style', 'display: none')
@@ -159,10 +156,7 @@ function createSubmits() {
     const contents = quill.getContents();
     submissions = contentFunc(contents)
     const position = document.getElementById('editor-container').getAttribute('data-position')
-<<<<<<< HEAD:public/js/index.js
-=======
 
->>>>>>> main:public/assets/js/index.js
     onSubmit(submissions, position, 1)
 };
 
