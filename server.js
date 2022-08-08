@@ -66,6 +66,7 @@ io.on("connection", async (socket) => {
                     order: [['position', 'ASC']]
                 }],
             });
+            console.log(storyData.submissions)
             // const testData = await Submission.findAll()
             // io.emit('testEvent', testData)
             io.emit('displayStory', storyData)
@@ -80,7 +81,7 @@ io.on("connection", async (socket) => {
             response({
                 status: storyData
             })
-            io.emit('displayStory', storyData)
+            // io.emit('displayStory', storyData)
         } catch (err) {
             console.log(err)
             io.emit('error', err)
@@ -126,7 +127,7 @@ io.on("connection", async (socket) => {
             //Updates the position of every of word in the story after the submission position, by an amount equal to the # of words inserted, 
             const incrementPosition = await Submission.increment({ position: submissionArray.length }, {
                 where: {
-                    position: { [Op.gte]: position }
+                    position: { [Op.gt]: position }
                 }
             });
             //Updates the users daily limit to ensure database is up to date
@@ -139,8 +140,8 @@ io.on("connection", async (socket) => {
             //For each word in the submission, creates a new table entry and an appropriate position
             for (let submission of submissionArray) {
                 //Check that the create parameters are correct
-                const submissionData = await Submission.create({ submission, position, user_id, story_id });
                 position++
+                const submissionData = await Submission.create({ submission, position, user_id, story_id });
             }
             const storyData = await Story.findByPk(story_id, {
                 include: [{
@@ -160,7 +161,7 @@ io.on("connection", async (socket) => {
         };
     });
     //Takes in the position of the word deleted and adjusts the database accordingly.
-    socket.on('deletion', async (position, user_id, response) => {
+    socket.on('deletion', async (position, user_id, story_id, response) => {
         console.log(`Delete word ${position}`)
         try {
             const submissionData = await Submission.destroy({
@@ -168,10 +169,6 @@ io.on("connection", async (socket) => {
                     position: position
                 }
             });
-
-            if (!submissionData) {
-                //TODO Error handling
-            }
 
             const incrementPosition = await Submission.increment('position', {
                 by: -1,

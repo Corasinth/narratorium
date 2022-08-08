@@ -26,25 +26,25 @@ router.get("/signup", (req, res) => {
 
 // "/story" get route for story page
 
-router.get("/story", async (req, res) => {
-  if(!req.session.loggedIn) {
-    res.redirect("/login");
-  } else {
-    res.render("storypage", {loggedIn: req.session.loggedIn, session: req.session});
-    // Get the story data to display story name on page
-    // const storyData = await Story.findOne();
-    // const story = storyData.get({ plain: true });
+// router.get("/story", async (req, res) => {
+//   if(!req.session.loggedIn) {
+//     res.redirect("/login");
+//   } else {
+//     res.render("storypage", {loggedIn: req.session.loggedIn, session: req.session});
+//     // Get the story data to display story name on page
+//     const storyData = await Story.findOne();
+//     const story = storyData.get({ plain: true });
 
-    // Get the submission data to show words for story
-    // const submissionData = await Submission.findAll();
-    // const submission = submissionData.map((sub) =>
-      sub.get({ plain: true })
-    // );
-    // console.info("Got submissions! " + submission);
-    // submission.forEach(sub => console.info(sub.submission));   
+//     // Get the submission data to show words for story
+//     const submissionData = await Submission.findAll();
+//     const submission = submissionData.map((sub) =>
+//       sub.get({ plain: true })
+//     );
+//     console.info("Got submissions! " + submission);
+//     submission.forEach(sub => console.info(sub.submission));   
 
-    // res.render("storypage", {story, submission, loggedIn: req.session.loggedIn});
-  }
-});
+//     res.render("storypage", {story, submission, loggedIn: req.session.loggedIn});
+//   }
+// });
 
 module.exports = router;
