@@ -119,7 +119,7 @@ io.on("connection", async (socket) => {
     })
 
     //Takes in submission, position, and user, and updates the database accordingly
-    socket.on('submission', async (submission, position, user_id, story_id) => {
+    socket.on('submission', async (submission, position, user_id, story_id, response) => {
         console.log(`Recieved submission of ${submission} at position ${position} from user ${user_id} in story ${story_id}`);
         let submissionArray = submission.split(' ');
         try {
@@ -160,8 +160,8 @@ io.on("connection", async (socket) => {
         };
     });
     //Takes in the position of the word deleted and adjusts the database accordingly.
-    socket.on('deletion', async (word_id, user_id, response) => {
-        console.log(`Delete word ${word_id}`)
+    socket.on('deletion', async (position, user_id, response) => {
+        console.log(`Delete word ${position}`)
         try {
             const submissionData = await Submission.destroy({
                 where: {

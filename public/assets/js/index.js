@@ -14,6 +14,10 @@ socket.on('connect', () => {
 socket.on('displayStory', (data) => {
     //Displays story from database on page
     let storyString = "";
+    if (!data.submissions) {
+        //Empty story HTML! 
+        return;
+    }
     for (let entries of data.submissions) {
         storyString += `${entries.submission} `
     }
@@ -33,8 +37,9 @@ function onSubmit(submissionText, position, story_id) {
 }
 
 //Call this function when a user deletes a word
-function onDelete(word_id) {
-    socket.emit('deletion', word_id, user_id, (response) => {
+function onDelete(position) {
+    //deletes html element with id of position
+    socket.emit('deletion', position, user_id, (response) => {
         if (response === true) {
             updateLimits(0, 1)
         } else {
@@ -72,7 +77,7 @@ function addStory(storyName) {
 //When this function is called (whenever someone navigates to the homepage), this function gets info from database and updates the limits for that user; 
 async function onOpen() {
     //Ensures that if the user is not logged in, the code to update limits and fetch data is not run
-    if (user_id === undefined) {
+    if (user_id === '') {
         return;
     }
     const response = await fetch(`/api/users/${user_id}`)
@@ -96,18 +101,18 @@ async function onOpen() {
 //===================================Regular Functions===================================
 function setLimits(charactersRemaining, deletesRemaining) {
     //TODO Code to set counters on HTML goes here! 
-    let characterCounter
-    let deleteCounter
-    characterCounter.textContent = charactersRemaining;
-    deleteCounter.textContent = deletesRemaining;
+    // let characterCounter
+    // let deleteCounter
+    // characterCounter.textContent = charactersRemaining;
+    // deleteCounter.textContent = deletesRemaining;
 }
 
 function updateLimits(amountToDecrementChar = 0, amountToDecrementDel = 0) {
     //TODO Code to set counters on HTML goes here! 
-    let characterCounter
-    let deleteCounter
-    characterCounter.textContent -= amountToDecrementChar;
-    deleteCounter.textContent -= amountToDecrementDel;
+    // let characterCounter
+    // let deleteCounter
+    // characterCounter.textContent -= amountToDecrementChar;
+    // deleteCounter.textContent -= amountToDecrementDel;
 }
 //===================================On Page Load===================================
 onOpen()
