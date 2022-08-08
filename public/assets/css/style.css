@@ -91,10 +91,9 @@
 
 /* ============== DECORATION ============== */
 
-h1 {
+h1, h2 {
     margin-top: 15px;
     margin-bottom: 15px;
-    text-decoration: none;
     color: #222; 
 }
 
