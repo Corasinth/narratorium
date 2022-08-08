@@ -1,7 +1,20 @@
-{{! adds tooltip bar to navigation }}
-{{! shows the story but within the container }}
-
 <div class="container">
+  <header class="navbar row">
+    <div id="navbar-section-1" class="six columns u-text-center">
+      {{! Icon Goes Here }}
+      <a class="navbar-title">Narratorium</a>
+    </div>
+    <div id="navbar-section-2" class="six columns u-text-center">
+      {{! Links to login and signup page }}
+      {{#if loggedIn}}
+        <a class="" id="logout"><button>Logout</button></a>
+      {{else}}
+        <a class="navbar-link" href="/login">Login</a>
+        <a class="navbar-link" href="/signup">Signup</a>
+      {{/if}}
+    </div>
+  </header>
+
   <h1 class="align-center">Narratorium</h1>
 
   <p class="align-center">A collaborative narration playground.
@@ -13,23 +26,32 @@
     <a href="/login" class="button u-center-block" id="start-btn">Get Started</a>
   {{/if}}
 
+  <div id="quillContainer" class="">
+    <div class="" id="editor-container" data-position="0"></div>
+    <div id="editBtns" class="align-center">
+      <button id="submit">Submit</button>
+      <button id="delete">Delete</button>
+    </div>
+  </div>
+
   <h3 class="align-center">
     {{#each stories as |story|}}
       {{story.storyname}}
     {{/each}}
   </h3>
 
-  <div id="quillContainer">
-    <div class="container" id="editor-container" data-position="0"></div>
-  </div>
-
-  <div id="editBtns">
-    <button id="submit">Submit</button>
-    <button id="delete">Delete</button>
-  </div>
-
   <button id="beginStory">Begin Story</button>
-
   <div id="story" class="align-left"></div>
 
+  {{! <div id="quillContainer" class="">
+    <div class="" id="editor-container" data-position="0"></div>
+    <div id="editBtns" class="align-center">
+      <button id="submit">Submit</button>
+      <button id="delete">Delete</button>
+    </div>
+  </div> }}
 </div>
+<footer class="align-center">
+  <a class="navbar-link" href="https://github.com/Corasinth/narratorium">Source Code!</a>
+  <a class="navbar-link" href="https://icons8.com">Icon by Icon8</a>
+</footer>
