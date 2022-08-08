@@ -66,6 +66,7 @@ io.on("connection", async (socket) => {
                     order: [['position', 'ASC']]
                 }],
             });
+            console.log(storyData.submissions)
             // const testData = await Submission.findAll()
             // io.emit('testEvent', testData)
             io.emit('displayStory', storyData)

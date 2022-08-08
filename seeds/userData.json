@@ -2,11 +2,15 @@
   {
     "username": "Pinky",
     "email": "sally@example.com",
-    "password": "password123"
+    "password": "password123",
+    "character_limit": 100,
+    "delete_limit": 10
   },
   {
     "username": "Brain",
     "email": "brian@example.com",
-    "password": "password345"
+    "password": "password345",
+    "character_limit": 100,
+    "delete_limit": 10
   }
 ]

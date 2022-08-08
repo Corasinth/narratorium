@@ -12,17 +12,29 @@ socket.on('connect', () => {
 })
 
 socket.on('displayStory', (data) => {
-    //Displays story from database on page
-    let storyString = "";
-    if (!data.submissions) {
-        //Empty story HTML! 
-        return;
+    // //Displays story from database on page
+    // let storyString = "";
+    // if (!data.submissions) {
+    //     //Empty story HTML! 
+    //     return;
+    // }
+    // for (let entries of data.submissions) {
+    //     storyString += `${entries.submission} `
+    // }
+    // console.log(storyString);
+    // console.log(data);
+ 
+    let render = []
+    console.log('rendering')
+    for (let i = 0; i < data.submissions.length; i++) {
+        console.log(data.submissions[i])
+        console.log(data.submissions[i].submission)
+        let createSubmit = `<span id=${data.submissions[i].position} class="edit">${data.submissions[i].submission} </span>`
+        console.log(createSubmit)
+        render.push(createSubmit)
     }
-    for (let entries of data.submissions) {
-        storyString += `${entries.submission} `
-    }
-    console.log(storyString);
-    console.log(data);
+    console.log(render)   
+    renderStoryToHomepage(render)
 })
 
 //Call this function when a user makes a submission
@@ -85,11 +97,11 @@ async function onOpen() {
     let currentDate = new Date(Date.now()).toISOString();
     let currentDay = currentDate[8] + currentDate[9]
     if (userData.last_logged_in === null || `${userData.last_logged_in[8]}${userData.last_logged_in[9]}` < currentDay) {
-        socket.emit('newDayDetection', currentDate, (response) => {
-            let numOfCharacters = response[0];
-            let numOfDeletes = response[1];
-            setLimits(numOfCharacters, numOfDeletes)
-        })
+        // socket.emit('newDayDetection', currentDate, (response) => {
+        //     let numOfCharacters = response[0];
+        //     let numOfDeletes = response[1];
+        //     setLimits(numOfCharacters, numOfDeletes)
+        // })
     } else {
         let numOfCharacters = userData.character_limit;
         let numOfDeletes = userData.delete_limit;
@@ -114,5 +126,24 @@ function updateLimits(amountToDecrementChar = 0, amountToDecrementDel = 0) {
     // characterCounter.textContent -= amountToDecrementChar;
     // deleteCounter.textContent -= amountToDecrementDel;
 }
+
+function renderStoryToHomepage (render) {
+    document.getElementById('story').innerHTML = render.join(' ')
+    console.log(render.join(' '))
+}
+
+//===================================Event Listeners===================================
+const edits = Array.from(document.getElementsByClassName('edit'))
+edits.forEach(edit => {
+  edit.addEventListener('dblclick', function red(e) {
+    e.stopPropagation()
+    const text = e.target.innerText
+    console.log(text)
+    //editSubmits(text)
+  })
+})
+
 //===================================On Page Load===================================
 onOpen()
+viewStory(1)
+
