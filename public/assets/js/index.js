@@ -127,18 +127,10 @@ function renderStoryToHomepage(render) {
     editEventListener()
 }
 
-function editSubmits(elementId) {
+function editSubmits(elementId = 1) {
+    console.log('edit submits')
     let editorDataAttribute = document.querySelector("#editor-container")
     editorDataAttribute.setAttribute("data-position", elementId)
-
-    const submitBtn = document.getElementById('submit')
-
-    submitBtn.addEventListener('click', function (e) {
-        e.stopImmediatePropagation()
-        console.log('test')
-        document.getElementById('quillContainer').setAttribute('style', 'display:none;')
-        createSubmits()
-    })
 }
 
 document.getElementById('quillContainer').setAttribute('style', 'display:none;')
@@ -185,6 +177,14 @@ function editEventListener() {
         })
     })
 }
+
+const submitBtn = document.getElementById('submit')
+submitBtn.addEventListener('click', function (e) {
+    e.stopImmediatePropagation()
+    document.getElementById('quillContainer').setAttribute('style', 'display:none;')
+    createSubmits()
+})
+
 // delete button
 const deleteBtn = document.getElementById('delete')
 deleteBtn.addEventListener('click', () => {
@@ -193,7 +193,6 @@ deleteBtn.addEventListener('click', () => {
 })
 
 const beginStory = document.getElementById('beginStory')
-
 beginStory.addEventListener('click', () => {
      document.getElementById('quillContainer').setAttribute('style', 'display:block;')
      })
