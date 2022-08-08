@@ -23,7 +23,7 @@ socket.on('displayStory', (data) => {
     // }
     // console.log(storyString);
     // console.log(data);
- 
+
     let render = []
     console.log('rendering')
     for (let i = 0; i < data.submissions.length; i++) {
@@ -33,7 +33,7 @@ socket.on('displayStory', (data) => {
         console.log(createSubmit)
         render.push(createSubmit)
     }
-    console.log(render)   
+    console.log(render)
     renderStoryToHomepage(render)
 })
 
@@ -127,21 +127,54 @@ function updateLimits(amountToDecrementChar = 0, amountToDecrementDel = 0) {
     // deleteCounter.textContent -= amountToDecrementDel;
 }
 
-function renderStoryToHomepage (render) {
+function renderStoryToHomepage(render) {
     document.getElementById('story').innerHTML = render.join(' ')
-    console.log(render.join(' '))
+    editEventListener()
+}
+
+function editSubmits(elementId) {
+    var quill = new Quill('#editor-container', {
+        theme: 'snow'
+    });
+
+    let editorDataAttribute = document.querySelector("#editor-container")
+    editorDataAttribute.setAttribute("data-position", elementId)
+
+    // hides toolbar
+    document.querySelectorAll('.ql-toolbar').forEach(toolbar => toolbar.setAttribute('style', "display:none;"))
+    submit.addEventListener('click', function () {
+        createSubmits()
+    })
+}
+
+// Click submit button: grabs Quill content and transforms it into a string, saves content as individual words in the DB (local storage)
+function createSubmits(quill) {
+    const contents = quill.getContents();
+    const submissions = contentFunc(contents)
+    onSubmit(submissions, 1)
+};
+
+function contentFunc(object) {
+    let objectStr = '';
+    for (let i = 0; i < object.ops.length; i++) {
+        objectStr += object.ops[i].insert
+    };
+    return objectStr
 }
 
 //===================================Event Listeners===================================
-const edits = Array.from(document.getElementsByClassName('edit'))
-edits.forEach(edit => {
-  edit.addEventListener('dblclick', function red(e) {
-    e.stopPropagation()
-    const text = e.target.innerText
-    console.log(text)
-    //editSubmits(text)
-  })
-})
+function editEventListener() {
+    const edits = Array.from(document.getElementsByClassName('edit'))
+    edits.forEach(edit => {
+        edit.addEventListener('dblclick', function red(e) {
+            e.stopPropagation()
+            let elementId = e.target.id
+            editSubmits(elementId)
+        })
+    })
+
+}
+
 
 //===================================On Page Load===================================
 onOpen()
