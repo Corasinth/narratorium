@@ -1,28 +1,18 @@
-/* * {
-    border: 1px solid red;
-} */
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap');
 
-/* ============== CONTAINER ============== */
-.div-container {
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-bottom: 15px;
+html {
+    margin-top: 40px;
 }
 
-
-.description-container {
-    margin-left: 25%;
-    margin-right: 25%;
+body {
+    height: 100vh;
 }
 
-/* .btn-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-} */
+a {
+    text-decoration: none;
+}
 
-/* ============== NAVBAR ============== */
+/* navbar */
 .navbar {
     position: sticky;
 }
@@ -43,52 +33,7 @@
     color: #222;
 }
 
-#logout {
-    margin: 1em;
-}
-
-.u-center-block {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#navbar-section-1 {
-    display: flex;
-    flex-wrap: row;
-    justify-content: start;
-    padding: 2em;
-}
-
-#navbar-section-2 {
-    display: flex;
-    flex-wrap: row;
-    justify-content: end;
-    padding: 2em;
-}
-/* ============== ALIGNMENT ============== */
-
-.align-right {
-    text-align: right;
-    margin-left: 70%;
-    padding: 15px;
-}
-
-.align-center {
-    text-align: center;
-}
-
-.center-btn {
-    margin: 0;
-    position: absolute;
-    top: 70%;
-    left: 25%;
-    -ms-transform: translateY(-50%, -50%);
-    transform: translateY(-50%, -50%);
-}
-
-/* ============== DECORATION ============== */
-
+/* Title */
 h1,
 h2 {
     margin-top: 15px;
@@ -100,28 +45,91 @@ h2 {
     text-decoration: none;
 }
 
-a {
-    text-decoration: none;
+/* title, title_p, story title */
+.align-center {
+    text-align: center;
 }
 
-/* ============== EDITOR ============== */
+/* #navbar-section-1 {
+    display: flex;
+    flex-wrap: row;
+    justify-content: start;
+    padding: 2em;
+}
+
+#navbar-section-2 {
+    display: flex;
+    flex-wrap: row;
+    justify-content: end;
+    padding: 2em;
+} */
+
+.align-right {
+    text-align: right;
+    margin-left: 70%;
+    padding: 15px;
+
+/* Quill Div */
+#quillContainer,
+.ql-editor {
+    height: 5em;
+    background-color: snow;
+}
+
+.ql-editor {
+    height: 5em;
+    color: blue;
+}
+
+#editBtns{
+    margin: 2.5em 0;
+}
+
+
+/* getStarted button */
+.u-center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+}
+/* story title */
+h3 {
+    margin-top: 1.5em;
+}
+
+/* story */
+#story {
+    margin: 1.5em;
+    font-family: 'Lora', serif;
+    font-weight: 500;
+    font-size: 1.75em;
+}
+
+/* quill container (toolbar and editor) */
+/* Quill editor */
 #quillContainer {
     position: sticky;
     top: 0;
-    z-index: 1;
-    background-color: white;
 }
 
-
-/* ============== STORY ============== */
-#story {
-    margin: 5em;
-}
-
-/* ============== STORY ============== */
 footer {
-    display: flex;
-    flex-wrap: row;
-    justify-content: space-around;
-    background-color: rgb(156, 156, 156);
+    position: fixed;
+    bottom: 40px;
+    width: 100%;
+}
+
+.align-right {
+    text-align: right;
+    margin-left: 70%;
+    padding: 15px;
+}
+
+.center-btn {
+    margin: 0;
+    position: absolute;
+    top: 70%;
+    left: 25%;
+    -ms-transform: translateY(-50%, -50%);
+    transform: translateY(-50%, -50%);
 }
