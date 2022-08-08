@@ -204,10 +204,10 @@ io.on("connection", async (socket) => {
             })
         };
     })
-    socket.on('newDayDetection', async(response) =>{
+    socket.on('newDayDetection', async(currentDate, response) =>{
         const charLimit = 100
         const delLimit = 10
-        await User.update({character_limit: charLimit, delete_limit: delLimit});
+        await User.update({character_limit: charLimit, delete_limit: delLimit, last_logged_in: currentDate});
         response({
             status: [charLimit, delLimit]
         })
