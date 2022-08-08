@@ -14,21 +14,21 @@
     <script defer src="/assets/js/index.js"></script>
     <title>Narratorium</title>
 </head>
+
 <body data-user_id="{{session.user_id}}">
-    {{!-- Navbar -- need name on left and login/ signup on right --}}
-    <div id="navbar">
-        {{!-- <ul> --}}
-        <a href="/"><h4>Narratorium</h4></a>
-        <ul>
-            {{!-- Links to login page, which offers a link to the signup page on it --}}
+    {{!-- Navbar --}}
+    <header class="container navbar">
+        <ul class="navbar-list">
+            <li class="navbar-item navbar-title">Narratorium</li>
+            {{!-- Links to login and signup page --}}
             {{#if loggedIn}}
-            <h5 class="align-right" id="logout"><button>Logout</button></h5>
+            <li class="navbar-item" id="logout"><button>Logout</button></li>
             {{else}}
-            <h5 class="align-right"><a href="/login">Login</a></h5>
-            <h5 class="align-right"><a href="/signup">Signup</a></h5>
+            <li class="navbar-item"><a class="navbar-link" href="/login">Login</a></li>
+            <li class="navbar-item"><a class="navbar-link" href="/signup">Signup</a></li>
             {{/if}}
-        {{!-- </ul> --}}
-    </div>
+        </ul>
+    </header>
     {{{body}}}
     {{#if loggedIn}}
     <script src="/assets/js/logout.js"></script>
