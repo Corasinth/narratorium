@@ -13,6 +13,8 @@ if (window.location.hostname === 'localhost') {
 
 const socket = io(url) 
 let quill;
+
+const quillContainer = document.getElementById('quillContainer')
 //===================================Socket Functions===================================
 socket.on('connect', () => {
     console.log(`Connected with socket id ${socket.id}`)
@@ -24,6 +26,10 @@ socket.on('displayStory', (data) => {
         let createSubmit = `<span id=${data.submissions[i].position} class="edit">${data.submissions[i].submission} </span>`
         render.push(createSubmit)
     }
+<<<<<<< HEAD:public/js/index.js
+=======
+
+>>>>>>> main:public/assets/js/index.js
     data.submissions.length == 0
         ? beginStory.setAttribute('style', 'display: block')
         : beginStory.setAttribute('style', 'display: none')
@@ -130,13 +136,15 @@ function renderStoryToHomepage(render) {
     editEventListener()
 }
 
+// Assigns a position to each word
 function editSubmits(elementId = 1) {
     let editorDataAttribute = document.querySelector("#editor-container")
     editorDataAttribute.setAttribute("data-position", elementId)
 }
 
-document.getElementById('quillContainer').setAttribute('style', 'display:none;')
-
+document.getElementById('quillContainer').style.display = 'none';
+document.getElementById('editBtns').style.display = 'none';
+// creates an instance of Quill editor
 function newQuill() {
     quill = new Quill('#editor-container', {
         theme: 'snow'
@@ -144,16 +152,21 @@ function newQuill() {
 }
 newQuill()
 
-// Click submit button: grabs Quill content and transforms it into a string, saves content as individual words in the DB (local storage)
+// Transforms/submits user input into Quill editor for db submission and page rendering  
 function createSubmits() {
     let submissions = '';
     if (!quill.getContents()) { console.log('no quill contents') }
     const contents = quill.getContents();
     submissions = contentFunc(contents)
     const position = document.getElementById('editor-container').getAttribute('data-position')
+<<<<<<< HEAD:public/js/index.js
+=======
+
+>>>>>>> main:public/assets/js/index.js
     onSubmit(submissions, position, 1)
 };
 
+// helper parses Quill editor content into a string
 function contentFunc(object) {
     let objectStr = '';
     for (let i = 0; i < object.ops.length; i++) {
@@ -162,22 +175,37 @@ function contentFunc(object) {
     return objectStr
 }
 
+function loginToEdit() {
+    if (!user_id) {
+        console.log('You are not logged in!')
+        document.getElementById('quillContainer').setAttribute('style', 'display:none;')
+        quill.setText('Login or Get Started to narrate\n')
+        document.getElementById('submit').disabled = true;
+        document.getElementById('delete').disabled = true;
+    } 
+}
+
 //===================================Event Listeners===================================
 
 let editWord = 0;
+// double click any word to edit
 function editEventListener() {
     const edits = Array.from(document.getElementsByClassName('edit'))
     edits.forEach(edit => {
         edit.addEventListener('dblclick', function red(e) {
+            e.stopImmediatePropagation
+            loginToEdit()
             document.getElementById('quillContainer').setAttribute('style', 'display:block;')
             editWord = 0
             const elementId = e.target.id
             editWord += elementId
             editSubmits(elementId)
+            document.getElementById('editBtns').style.display = 'block';
         })
     })
 }
 
+// submit quill content
 const submitBtn = document.getElementById('submit')
 submitBtn.addEventListener('click', function (e) {
     e.stopImmediatePropagation()
@@ -192,10 +220,11 @@ deleteBtn.addEventListener('click', () => {
     onDelete(elementId, 1)
 })
 
+// begins story 
 const beginStory = document.getElementById('beginStory')
 beginStory.addEventListener('click', () => {
-     document.getElementById('quillContainer').setAttribute('style', 'display:block;')
-     })
+    document.getElementById('quillContainer').setAttribute('style', 'display:block;')
+})
 
 //===================================On Page Load===================================
 onOpen()
