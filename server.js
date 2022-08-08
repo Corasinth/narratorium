@@ -1,3 +1,6 @@
+//Limit Values
+const charLimit = 100;
+const delLimit = 100; 
 // Import packages
 const { createServer } = require("http");
 const { Server } = require("socket.io");
@@ -89,6 +92,17 @@ io.on("connection", async (socket) => {
     //Takes in story_id and renames the story title 
     socket.on('renameStory', async (newName, story_id, user_id, response) => {
         try {
+            let userData = await User.findOne({
+                where: {
+                    id:user_id
+                }
+            })
+            if (!(userData.character_limit === charLimit && userData.delete_limit === delLimit)) {
+                response ({
+                    status: 'fail'
+                })
+                return;
+            }
             await Story.update({ storyname: newName }, {
                 where: {
                     id: story_id
@@ -134,7 +148,7 @@ io.on("connection", async (socket) => {
                     id:user_id
                 }
             })
-            // const currentCharLimit = userData.character_limit - submissionArray.length
+            const currentCharLimit = userData.character_limit - submissionArray.length
             // if (currentCharLimit < 0 ) {
             //     response ({
             //         status: false
@@ -142,7 +156,7 @@ io.on("connection", async (socket) => {
             //     return;
             // } 
             //Updates the users daily limit to ensure database is up to date
-            const userDecrement = await User.decrement('character_limit', {
+            await User.decrement('character_limit', {
                 by: submission.length,
                 where: {
                     id: user_id
@@ -152,7 +166,7 @@ io.on("connection", async (socket) => {
             for (let submission of submissionArray) {
                 //Check that the create parameters are correct
                 position++
-                const submissionData = await Submission.create({ submission, position, user_id, story_id });
+                await Submission.create({ submission, position, user_id, story_id });
             }
             const storyData = await Story.findByPk(story_id, {
                 include: [{
@@ -164,7 +178,7 @@ io.on("connection", async (socket) => {
             io.emit('displayStory', storyData)
             x()//remove
             response({
-                status: true
+                status: [true, currentCharLimit]
             })
         } catch (err) {
             response({
@@ -217,7 +231,7 @@ io.on("connection", async (socket) => {
             io.emit('displayStory', storyData)
             x()//remove
             response({
-                status: true
+                status: [true, currentDelLimit]
             })
         } catch (err) {
             response({
@@ -226,8 +240,6 @@ io.on("connection", async (socket) => {
         };
     })
     socket.on('newDayDetection', async (currentDate, response) => {
-        const charLimit = 100
-        const delLimit = 10
         await User.update({ character_limit: charLimit, delete_limit: delLimit, last_logged_in: currentDate });
         response({
             status: [charLimit, delLimit]
