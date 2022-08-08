@@ -1,10 +1,10 @@
 {{! adds tooltip bar to navigation }}
 {{! shows the story but within the container }}
 
-<div class="container">
-  <a href="/"><h2 class="align-center">Narratorium</h2></a>
+<div class="body-container">
+  <a href="/"><h1 class="align-center">Narratorium</h1></a>
 
-  {{#if loggedIn}}
+  {{!-- {{#if loggedIn}}
     <div class="one.column">
       {{! <a href="/story" class="button" id="start-btn">Get Started</a> }}
     </div>
@@ -12,10 +12,13 @@
     <div class="center-btn" id="btn-container">
       <a href="/login" class="button" id="start-btn">Get Started</a>
     </div>
-  {{/if}}
-  <p class="align-center">Narratorium is a collaborative story in which each user offers a few words to contribute, whether by editing past segments, deleting a few words or letters here and there, and/ or adding a few words onto the end.
-  </p>
-  <div class="container" id="editor-container"></div>
+  {{/if}} --}}
+  <div class="description-container">
+    <p class="align-center">Narratorium is a collaborative story in which each user offers a few words to contribute, whether by editing past segments, deleting a few words or letters here and there, and/ or adding a few words onto the end.
+    </p>
+  </div>
+
+  <div class="div-container" id="editor-container"></div>
   <button id="submit">Submit</button>
   <div id="story" class="align-center"></div>
 </div>
