@@ -24,9 +24,14 @@
     <button id="submit">Submit</button>
     <button id="delete">Delete</button>
   </div>
+  
   <button id="beginStory">Begin Story</button>
 
-  <h2>{{story.storyname}}</h2>
-  
+  <h2>
+    {{#each stories as |story|}}
+      {{story.storyname}}
+      {{/each}}
+  </h2>
+
   <div id="story" class="align-center"></div>
 </div>
