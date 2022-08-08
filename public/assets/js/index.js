@@ -4,9 +4,14 @@ const body = document.querySelector('body');
 const user_id = body.dataset.user_id;
 
 //Directs socket connection to server
-// const socket = io('http://localhost:3001')
-const socket = io('https://narratorium.herokuapp.com') 
+let url
+if (window.location.hostname === 'localhost') {
+    url = 'http://localhost:3001'
+} else {
+    url = 'https://narratorium.herokuapp.com' 
+}
 
+const socket = io(url) 
 let quill;
 //===================================Socket Functions===================================
 socket.on('connect', () => {
