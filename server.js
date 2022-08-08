@@ -76,8 +76,8 @@ io.on("connection", async (socket) => {
     })
     //Takes in title and creates a new story
     socket.on('addStory', async (storyname, response) => {
-        try{
-            const storyData = await Story.create({storyname});
+        try {
+            const storyData = await Story.create({ storyname });
             response({
                 status: storyData
             })
@@ -95,7 +95,7 @@ io.on("connection", async (socket) => {
                     id: story_id
                 }
             })
-            await User.update({character_limit:0, delete_limit:0}, {
+            await User.update({ character_limit: 0, delete_limit: 0 }, {
                 where: {
                     id: user_id
                 }
@@ -134,7 +134,7 @@ io.on("connection", async (socket) => {
             await User.decrement('character_limit', {
                 by: submission.length,
                 where: {
-                    id:user_id
+                    id: user_id
                 }
             });
             //For each word in the submission, creates a new table entry and an appropriate position
@@ -151,12 +151,13 @@ io.on("connection", async (socket) => {
                 }],
             });
             io.emit('displayStory', storyData)
-            response ({
+            x()//remove
+            response({
                 status: true
             })
         } catch (err) {
             response({
-                status:err
+                status: err
             })
         };
     });
@@ -184,14 +185,15 @@ io.on("connection", async (socket) => {
                     order: [['position', 'ASC']]
                 }],
             });
-            
+
             await User.decrement('delete_limit', {
                 by: 1,
                 where: {
-                    id:user_id
+                    id: user_id
                 }
             });
             io.emit('displayStory', storyData)
+            x()//remove
             response({
                 status: true
             })
@@ -201,15 +203,20 @@ io.on("connection", async (socket) => {
             })
         };
     })
-    socket.on('newDayDetection', async(currentDate, response) =>{
+    socket.on('newDayDetection', async (currentDate, response) => {
         const charLimit = 100
         const delLimit = 10
-        await User.update({character_limit: charLimit, delete_limit: delLimit, last_logged_in: currentDate});
+        await User.update({ character_limit: charLimit, delete_limit: delLimit, last_logged_in: currentDate });
         response({
             status: [charLimit, delLimit]
         })
     })
 });
+
+async function x() {
+    const submissionsData = await Submission.findAll()
+    io.emit("test", submissionsData)
+}
 
 // Sync database and start listening
 sequelize.sync({ force: false }).then(() => httpServer.listen(PORT, () => {
