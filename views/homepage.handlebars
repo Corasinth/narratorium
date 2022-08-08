@@ -16,6 +16,12 @@
   <p class="align-center">Make your mark on this story. Double click a word to insert text after it, or target it for deletion.
   </p>
 
+  <h3>
+    {{#each stories as |story|}}
+      {{story.storyname}}
+      {{/each}}
+  </h3>
+
   <div id="quillContainer">
     <div class="container" id="editor-container" data-position="0"></div>
   </div>
@@ -24,20 +30,11 @@
     <button id="submit">Submit</button>
     <button id="delete">Delete</button>
   </div>
-  
-  <button id="beginStory">Begin Story</button>
 
-<<<<<<< HEAD
-  <h2>{{story.storyname}}</h2>
+
+  <button id="beginStory">Begin Story</button>
   
   <div id="story" class="align-left"></div>
-=======
-  <h2>
-    {{#each stories as |story|}}
-      {{story.storyname}}
-      {{/each}}
-  </h2>
 
-  <div id="story" class="align-center"></div>
->>>>>>> main
+
 </div>
