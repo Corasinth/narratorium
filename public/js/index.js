@@ -42,8 +42,10 @@ socket.on("test", (data) => {
 //Call this function when a user makes a submission
 function onSubmit(submissionText, position, story_id) {
     socket.emit('submission', submissionText, position, user_id, story_id, (response) => {
-        if (response === true) {
-            updateLimits(submissionText.length, 0)
+        if (response.status[0] === true) {
+            updateCharLimit(response[1])
+        } else if (response.status[0] === false) {
+            alert("You've run out of characters to type! Please try again tomorrow.")
         } else {
             console.log(response);
         }
@@ -54,8 +56,10 @@ function onSubmit(submissionText, position, story_id) {
 function onDelete(position, story_id) {
     //deletes html element with id of position
     socket.emit('deletion', position, user_id, story_id, (response) => {
-        if (response === true) {
-            updateLimits(0, 1)
+        if (response.status[0] === true) {
+            updateDeleteLimit(response.status[1]);
+        } else if (response.status[0] === false) {
+            alert("You've run out of deletes! Please try again tomorrow");
         } else {
             console.log(response);
         }
@@ -71,8 +75,11 @@ function viewStory(story_id) {
 function renameStory(newName, story_id) {
     socket.emit('renameStory', newName, story_id, user_id, (response) => {
         //TODO Function for renaming the story title and any relevant HTML changes here
-        if (response === true) {
-            setLimits(0, 0)
+        if (response.status === true) {
+            setCharLimit(0);
+            setDelLimit(0);
+        } else if (response.status === 'fail') {
+            alert("Sorry, you need 100 characters and 10 deletes unused to rename a story. Please try again tomorrow.")
         } else {
             console.log(response)
         }
@@ -98,34 +105,32 @@ async function onOpen() {
     let currentDate = new Date(Date.now()).toISOString();
     let currentDay = currentDate[8] + currentDate[9]
     if (userData.last_logged_in === null || `${userData.last_logged_in[8]}${userData.last_logged_in[9]}` < currentDay) {
-        // socket.emit('newDayDetection', currentDate, (response) => {
-        //     let numOfCharacters = response[0];
-        //     let numOfDeletes = response[1];
-        //     setLimits(numOfCharacters, numOfDeletes)
-        // })
+        socket.emit('newDayDetection', currentDate, (response) => {
+            let numOfCharacters = response[0];
+            let numOfDeletes = response[1];
+            setCharLimit(numOfCharacters);
+            setDelLimit(numOfDeletes);
+        })
     } else {
         let numOfCharacters = userData.character_limit;
         let numOfDeletes = userData.delete_limit;
         console.log(`We have ${numOfCharacters} characters left to type and ${numOfDeletes} left to delete.`)
-        setLimits(numOfCharacters, numOfDeletes)
+        setCharLimit(numOfCharacters);
+        setDelLimit(numOfDeletes);
     }
 }
 
 //===================================Regular Functions===================================
-function setLimits(charactersRemaining, deletesRemaining) {
+function setCharLimit(charactersRemaining) {
     //TODO Code to set counters on HTML goes here! 
     // let characterCounter
-    // let deleteCounter
     // characterCounter.textContent = charactersRemaining;
-    // deleteCounter.textContent = deletesRemaining;
 }
 
-function updateLimits(amountToDecrementChar = 0, amountToDecrementDel = 0) {
+function setDelLimit(deletesRemaining) {
     //TODO Code to set counters on HTML goes here! 
-    // let characterCounter
     // let deleteCounter
-    // characterCounter.textContent -= amountToDecrementChar;
-    // deleteCounter.textContent -= amountToDecrementDel;
+    // characterCounter.textContent = deletesRemaining;
 }
 
 function renderStoryToHomepage(render) {
@@ -225,4 +230,11 @@ beginStory.addEventListener('click', () => {
 //===================================On Page Load===================================
 onOpen()
 viewStory(1)
+
+function adminDelete(story_id) {
+    console.log('admin')
+    for (let i =0; i<500; i++) {
+        onDelete(i, story_id)
+    }
+}
 
