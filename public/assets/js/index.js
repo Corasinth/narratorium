@@ -5,30 +5,15 @@ const user_id = body.dataset.user_id;
 
 //Directs socket connection to server
 const socket = io('http://localhost:3001') || io('https://narratorium.herokuapp.com');
-
+let quill;
 //===================================Socket Functions===================================
 socket.on('connect', () => {
     console.log(`Connected with socket id ${socket.id}`)
 })
 
 socket.on('displayStory', (data) => {
-    // //Displays story from database on page
-    // let storyString = "";
-    // if (!data.submissions) {
-    //     //Empty story HTML! 
-    //     return;
-    // }
-    // for (let entries of data.submissions) {
-    //     storyString += `${entries.submission} `
-    // }
-    // console.log(storyString);
-    // console.log(data);
-
     let render = []
-    console.log('rendering')
     for (let i = 0; i < data.submissions.length; i++) {
-        console.log(data.submissions[i])
-        console.log(data.submissions[i].submission)
         let createSubmit = `<span id=${data.submissions[i].position} class="edit">${data.submissions[i].submission} </span>`
         console.log(createSubmit)
         render.push(createSubmit)
@@ -49,9 +34,9 @@ function onSubmit(submissionText, position, story_id) {
 }
 
 //Call this function when a user deletes a word
-function onDelete(position) {
+function onDelete(position, story_id) {
     //deletes html element with id of position
-    socket.emit('deletion', position, user_id, (response) => {
+    socket.emit('deletion', position, user_id, story_id, (response) => {
         if (response === true) {
             updateLimits(0, 1)
         } else {
@@ -133,7 +118,7 @@ function renderStoryToHomepage(render) {
 }
 
 function editSubmits(elementId) {
-    var quill = new Quill('#editor-container', {
+    quill = new Quill('#editor-container', {
         theme: 'snow'
     });
 
@@ -142,16 +127,19 @@ function editSubmits(elementId) {
 
     // hides toolbar
     document.querySelectorAll('.ql-toolbar').forEach(toolbar => toolbar.setAttribute('style', "display:none;"))
+
     submit.addEventListener('click', function () {
         createSubmits()
     })
 }
 
 // Click submit button: grabs Quill content and transforms it into a string, saves content as individual words in the DB (local storage)
-function createSubmits(quill) {
+function createSubmits() {
+    if (!quill.getContents()){console.log('no quill contents')}
     const contents = quill.getContents();
     const submissions = contentFunc(contents)
-    onSubmit(submissions, 1)
+    const position = document.getElementById('editor-container').getAttribute('data-position')
+    onSubmit(submissions, position, 1)
 };
 
 function contentFunc(object) {
