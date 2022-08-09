@@ -37,16 +37,11 @@ socket.on('displayStory', (data) => {
     renderStoryToHomepage(render)
 })
 
-//test function
-socket.on("test", (data) => {
-    console.table(data)
-})
-
 //Call this function when a user makes a submission
 function onSubmit(submissionText, position, story_id) {
     socket.emit('submission', submissionText, position, user_id, story_id, (response) => {
         if (response.status[0] === true) {
-            setCharLimit(response[1])
+            setCharLimit(response.status[1])
         } else if (response.status[0] === false) {
             alert("You've run out of characters to type! Please try again tomorrow.")
         } else {
@@ -71,7 +66,9 @@ function onDelete(position, story_id) {
 
 //Call this function when the user navigates to a story
 function viewStory(story_id) {
-    socket.emit('viewStory', story_id)
+    socket.emit('viewStory', story_id, (response)=> {
+        console.log(response)
+    })
 }
 
 //Call this function when the user renames a story
@@ -92,7 +89,6 @@ function renameStory(newName, story_id) {
 //Call this function when the user adds a story
 function addStory(storyName) {
     socket.emit('addStory', storyName, (response) => {
-        //TODO Function for adding a new story, place any relevant HTML changes here
         console.log(response)
     })
 }
@@ -103,6 +99,8 @@ async function onOpen() {
     if (user_id === '') {
         return;
     }
+    document.getElementById('submit').disabled = false;
+    document.getElementById('delete').disabled = false;
     const response = await fetch(`/api/users/${user_id}`)
     const userData = await response.json()
     let currentDate = new Date(Date.now()).toISOString();
@@ -117,7 +115,7 @@ async function onOpen() {
     } else {
         let numOfCharacters = userData.character_limit;
         let numOfDeletes = userData.delete_limit;
-        console.log(`We have ${numOfCharacters} characters left to type and ${numOfDeletes} left to delete.`)
+        // console.log(`We have ${numOfCharacters} characters left to type and ${numOfDeletes} left to delete.`)
         setCharLimit(numOfCharacters);
         setDelLimit(numOfDeletes);
     }
@@ -125,15 +123,13 @@ async function onOpen() {
 
 //===================================Regular Functions===================================
 function setCharLimit(charactersRemaining) {
-    //TODO Code to set counters on HTML goes here! 
-    // let characterCounter
-    // characterCounter.textContent = charactersRemaining;
+    let characterCounter = document.querySelector('#charCounter')
+    characterCounter.textContent = `Characters Remaining Today: ${charactersRemaining}`;
 }
 
 function setDelLimit(deletesRemaining) {
-    //TODO Code to set counters on HTML goes here! 
-    // let deleteCounter
-    // characterCounter.textContent = deletesRemaining;
+    let deleteCounter = document.querySelector('#delCounter')
+    deleteCounter.textContent = `Deletes Remaining Today: ${deletesRemaining}`;
 }
 
 function renderStoryToHomepage(render) {
@@ -147,16 +143,25 @@ function editSubmits(elementId = 1) {
     editorDataAttribute.setAttribute("data-position", elementId)
 }
 
-document.getElementById('quillContainer').style.display = 'none';
-document.getElementById('editBtns').style.display = 'none';
+
 // creates an instance of Quill editor
-function newQuill() {
-    quill = new Quill('#editor-container', {
-        placeholder: '',
-        theme: 'snow'
+async function newQuill() {
+    quill = await new Quill('#editor-container', {
+        theme: 'snow',
+    },
+    );
+    document.querySelector('.ql-editor').setAttribute('data-textlength', '0')
+    const toolbar = document.querySelector('.ql-toolbar');
+    const characterCounter = document.createElement('span');
+    const deleteCounter = document.createElement('span');
+    characterCounter.setAttribute('id', 'charCounter')
+    deleteCounter.setAttribute('id', 'delCounter')
+    toolbar.appendChild(characterCounter);
+    toolbar.appendChild(deleteCounter);
+    //Call this here so the DOM elements the event listener attatches to are created before the listener is created
+    onQuillCreate()
     });
 }
-newQuill()
 
 // Transforms/submits user input into Quill editor for db submission and page rendering  
 function createSubmits() {
@@ -196,7 +201,6 @@ function editEventListener() {
     const edits = Array.from(document.getElementsByClassName('edit'))
     edits.forEach(edit => {
         edit.addEventListener('dblclick', function red(e) {
-            e.stopImmediatePropagation
             loginToEdit()
             document.getElementById('quillContainer').setAttribute('style', 'display:block;')
             quill.setText('\n');
@@ -211,31 +215,54 @@ function editEventListener() {
 
 // submit quill content
 const submitBtn = document.getElementById('submit')
+if (submitBtn !== null) {
 submitBtn.addEventListener('click', function (e) {
     e.stopImmediatePropagation()
     document.getElementById('quillContainer').setAttribute('style', 'display:none;')
     document.getElementById('editBtns').style.display = 'none';
     createSubmits()
 })
+}
 
 // delete button
 const deleteBtn = document.getElementById('delete')
+if (deleteBtn !== null) {
 deleteBtn.addEventListener('click', () => {
     const elementId = editWord
     onDelete(elementId, 1)
 })
+}
 
 // begins story 
 const beginStory = document.getElementById('beginStory')
+if (beginStory !== null) {
 beginStory.addEventListener('click', () => {
     document.getElementById('quillContainer').setAttribute('style', 'display:block;')
     document.getElementById('editBtns').style.display = 'block';
 })
+}
+
+function onQuillCreate() {
+    document.querySelector('.ql-editor').addEventListener('keyup', () => {
+        let characterCounter = document.querySelector('#charCounter')
+        let editor = document.querySelector('.ql-editor')
+        if (editor.textContent.length>editor.dataset.textlength) {
+            let value = characterCounter.textContent.split(':')[1]
+            setCharLimit(parseInt(value)-1)            
+        } else if (editor.textContent.length<editor.dataset.textlength) {
+            let value = characterCounter.textContent.split(':')[1]
+            setCharLimit(parseInt(value)+1)            
+        }
+        editor.setAttribute('data-textlength', editor.textContent.length);
+    })
+}
 
 //===================================On Page Load===================================
-onOpen()
-viewStory(1)
-
+if (document.location.pathname === '/') {
+    onOpen()
+    viewStory(1)
+    newQuill()
+}
 function adminDelete(story_id) {
     console.log('admin')
     for (let i =0; i<500; i++) {

@@ -85,6 +85,7 @@ h2 {
 #quillContainer {
     position: sticky;
     top: 0;
+    display: none;
     min-height: 14rem;
     margin-bottom: 14rem;
     z-index: 0;
@@ -96,7 +97,6 @@ h2 {
 #editBtns {
    padding: 3px;
 }
-
 
 .align-right {
     text-align: right;
@@ -122,6 +122,26 @@ h2 {
 
 .ql-editor {
     color: blue;
+}
+
+.ql-toolbar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/* ================ COUNTERS =============== */
+#charCounter,
+#delCounter {
+    font-weight: bold;
+    font-size: small;
+    margin: .5em;
+}
+
+/* ================ BUTTONS =============== */
+#editBtns{
+    margin: 2.5em 0;
+    display:none;
 }
 
 /* getStarted button */
