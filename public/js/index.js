@@ -22,6 +22,9 @@ socket.on('connect', () => {
 
 socket.on('displayStory', (data) => {
     let render = []
+    if (data === null) {
+        return;
+    }
     for (let i = 0; i < data.submissions.length; i++) {
         let createSubmit = `<span id=${data.submissions[i].position} class="edit">${data.submissions[i].submission} </span>`
         render.push(createSubmit)
@@ -43,7 +46,7 @@ socket.on("test", (data) => {
 function onSubmit(submissionText, position, story_id) {
     socket.emit('submission', submissionText, position, user_id, story_id, (response) => {
         if (response.status[0] === true) {
-            updateCharLimit(response[1])
+            setCharLimit(response[1])
         } else if (response.status[0] === false) {
             alert("You've run out of characters to type! Please try again tomorrow.")
         } else {
@@ -57,7 +60,7 @@ function onDelete(position, story_id) {
     //deletes html element with id of position
     socket.emit('deletion', position, user_id, story_id, (response) => {
         if (response.status[0] === true) {
-            updateDeleteLimit(response.status[1]);
+            setDeleteLimit(response.status[1]);
         } else if (response.status[0] === false) {
             alert("You've run out of deletes! Please try again tomorrow");
         } else {
