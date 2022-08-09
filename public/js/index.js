@@ -237,6 +237,8 @@ const deleteBtn = document.getElementById('delete')
 if (deleteBtn !== null) {
     deleteBtn.addEventListener('click', () => {
         const elementId = editWord
+        document.getElementById('quillContainer').setAttribute('style', 'display:none;')
+        document.getElementById('editBtns').style.display = 'none';
         onDelete(elementId, 1)
     })
 }
