@@ -93,10 +93,12 @@ h2 {
 .push {
     height: 14rem;
 }
+
 #editBtns {
    padding: 3px;
+   background-color: rgb(165, 165, 165);
+   padding-top: 10px;
 }
-
 
 .align-right {
     text-align: right;
@@ -114,10 +116,14 @@ h2 {
 }
 
 /* Quill Div */
-#quillContainer,
+#quillContainer,.ql-toolbar,
 .ql-editor {
     height: 5em;
     background-color: snow;
+}
+.ql-toolbar {
+display: flex;
+align-content: center;    
 }
 
 .ql-editor {
@@ -133,10 +139,6 @@ h2 {
 }
 
 /* ================ STORY =============== */
-
-/* story title */
-#story-title {}
-
 /* title, title_p, story title */
 .align-center {
     text-align: center;
@@ -148,7 +150,6 @@ h2 {
     font-weight: 500;
     font-size: 1.2em;
 }
-
 
 /* ================ FOOTER =============== */
 .container {
@@ -163,6 +164,10 @@ footer {
     align-items: center;
     position: absolute;
     width: 100%;
+}
+
+.push-footer {
+    height: 7rem;
 }
 
 @media screen and (max-width: 768px) {
@@ -182,5 +187,14 @@ footer {
     h1 {
         font-size: 4rem;
         align-self: center;
+    }
+}
+
+@media screen and (max-width: 330px) {
+    .navbar {
+        margin-top: -15px;
+    }
+    h1 {
+        font-size: 3rem;
     }
 }
