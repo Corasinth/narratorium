@@ -103,8 +103,8 @@ async function onOpen() {
     document.getElementById('submit').disabled = false;
     document.getElementById('delete').disabled = false;
     socket.emit('newDayDetection', user_id, (response) => {
-            let numOfCharacters = response[1];
-            let numOfDeletes = response[2];
+            let numOfCharacters = response.status[1];
+            let numOfDeletes = response.status[2];
             setCharLimit(numOfCharacters);
             setDelLimit(numOfDeletes);
         })
