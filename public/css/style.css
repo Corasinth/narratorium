@@ -22,13 +22,14 @@ a {
 /* ================ NAVBAR =============== */
 .navbar {
     position: sticky;
-    top:0;
+    top: 0px;
     display: flex;
     flex-direction: row;
-    align-items: center ;
-    border-bottom: solid black 1px; 
+    align-items: center;
+    border-bottom: solid black 1px;
     justify-content: space-between;
     background-color: white;
+    z-index: 2;
 }
 
 .u-text-center {
@@ -49,11 +50,18 @@ a {
     margin-bottom: 0;
 }
 
+#title-paragraph {
+    margin-top: 2em;
+    text-transform: uppercase;
+}
+
 /* Title */
+#narratorium {
+    margin: auto 0;
+}
+
 h1,
 h2 {
-    margin-top: 15px;
-    margin-bottom: 15px;
     color: #222;
     text-transform: uppercase;
     font-weight: 400;
@@ -67,7 +75,6 @@ h2 {
     justify-content: center;
 }
 
-
 .align-right {
     text-align: right;
     margin-left: 70%;
@@ -78,7 +85,18 @@ h2 {
 #quillContainer {
     position: sticky;
     top: 0;
+    min-height: 14rem;
+    margin-bottom: 14rem;
+    z-index: 0;
 }
+
+.push {
+    height: 14rem;
+}
+#editBtns {
+   padding: 3px;
+}
+
 
 .align-right {
     text-align: right;
@@ -103,12 +121,7 @@ h2 {
 }
 
 .ql-editor {
-    height: 5em;
     color: blue;
-}
-
-#editBtns{
-    margin: 2.5em 0;
 }
 
 /* getStarted button */
@@ -122,9 +135,7 @@ h2 {
 /* ================ STORY =============== */
 
 /* story title */
-h3 {
-    margin-top: 1.5em;
-}
+#story-title {}
 
 /* title, title_p, story title */
 .align-center {
@@ -140,7 +151,9 @@ h3 {
 
 
 /* ================ FOOTER =============== */
-
+.container {
+    min-height: 85%;
+}
 footer {
     background-color: rgb(165, 165, 165);
     height: 5em;
@@ -149,5 +162,25 @@ footer {
     justify-content: space-evenly;
     align-items: center;
     position: absolute;
-    width:100%;
- }
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+    }
+
+    #login-links {
+        display: flex;
+        flex-direction: row;
+        width: fit-content;
+        text-align: center;
+        gap: 100%;
+        margin-bottom: 5px;
+    }
+
+    h1 {
+        font-size: 4rem;
+        align-self: center;
+    }
+}

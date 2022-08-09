@@ -19,7 +19,7 @@
 </head>
 
 <body data-user_id="{{session.user_id}}">
-  <header class="navbar row container">
+  <header class="navbar row">
       <div class="two columns">
         <a class="navbar-link" href="/">
           <img src="/images/icons8-pen-100.png" height="70px" width="70px">
@@ -27,11 +27,11 @@
       </div>
 
       <div class="eight columns">
-        <h1 class="align-center">Narratorium</h1>
+        <h1 id="narratorium" class="align-center">Narratorium</h1>
       </div>
       
       {{! Links to login and signup page }}
-      <div class="two columns logx">
+      <div id='login-links' class="two columns logx">
         {{#if loggedIn}}
         <a id="logout"><button id="logoutbutton">Logout</button></a>
         {{else}}
@@ -50,3 +50,4 @@
 </body>
 
 </html>
+

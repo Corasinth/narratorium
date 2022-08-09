@@ -152,6 +152,7 @@ document.getElementById('editBtns').style.display = 'none';
 // creates an instance of Quill editor
 function newQuill() {
     quill = new Quill('#editor-container', {
+        placeholder: '',
         theme: 'snow'
     });
 }
@@ -198,6 +199,7 @@ function editEventListener() {
             e.stopImmediatePropagation
             loginToEdit()
             document.getElementById('quillContainer').setAttribute('style', 'display:block;')
+            quill.setText('\n');
             editWord = 0
             const elementId = e.target.id
             editWord += elementId
