@@ -78,6 +78,7 @@ h2 {
 #quillContainer {
     position: sticky;
     top: 0;
+    display: none;
 }
 
 .align-right {
@@ -107,8 +108,25 @@ h2 {
     color: blue;
 }
 
+.ql-toolbar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+}
+
+/* ================ COUNTERS =============== */
+#charCounter,
+#delCounter {
+    font-weight: bold;
+    font-size: small;
+    margin: .5em;
+}
+
+/* ================ BUTTONS =============== */
 #editBtns{
     margin: 2.5em 0;
+    display:none;
 }
 
 /* getStarted button */

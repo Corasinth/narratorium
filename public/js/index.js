@@ -126,14 +126,13 @@ async function onOpen() {
 //===================================Regular Functions===================================
 function setCharLimit(charactersRemaining) {
     //TODO Code to set counters on HTML goes here! 
-    // let characterCounter
-    // characterCounter.textContent = charactersRemaining;
+    let characterCounter = document.querySelector('#charCounter')
+    characterCounter.textContent = `Characters Remaining Today: ${charactersRemaining}`;
 }
 
 function setDelLimit(deletesRemaining) {
-    //TODO Code to set counters on HTML goes here! 
-    // let deleteCounter
-    // characterCounter.textContent = deletesRemaining;
+    let deleteCounter = document.querySelector('#delCounter')
+    deleteCounter.textContent = `Deletes Remaining Today: ${deletesRemaining}`;
 }
 
 function renderStoryToHomepage(render) {
@@ -147,15 +146,46 @@ function editSubmits(elementId = 1) {
     editorDataAttribute.setAttribute("data-position", elementId)
 }
 
-document.getElementById('quillContainer').style.display = 'none';
-document.getElementById('editBtns').style.display = 'none';
+
+var toolbarOptions = [
+  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+  ['blockquote', 'code-block'],
+
+  [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+  [{ 'direction': 'rtl' }],                         // text direction
+
+  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+  [{ 'font': [] }],
+  [{ 'align': [] }],
+
+  ['clean'],                                         // remove formatting button
+  ['omega']
+];
 // creates an instance of Quill editor
-function newQuill() {
-    quill = new Quill('#editor-container', {
-        theme: 'snow'
-    });
+async function newQuill() {
+    quill = await new Quill('#editor-container', {
+        // modules: {
+        //     toolbar: toolbarOptions
+        // },
+        theme: 'snow',
+    },
+    );
+    const toolbar = document.querySelector('.ql-toolbar');
+    const characterCounter = document.createElement('span');
+    const deleteCounter = document.createElement('span');
+    characterCounter.setAttribute('id', 'charCounter')
+    deleteCounter.setAttribute('id', 'delCounter')
+    toolbar.appendChild(characterCounter);
+    toolbar.appendChild(deleteCounter);
+    //Call this here so the DOM elements the event listener attatches to are created before the listener is created
+    onQuillCreate()
 }
-newQuill()
 
 // Transforms/submits user input into Quill editor for db submission and page rendering  
 function createSubmits() {
@@ -195,7 +225,6 @@ function editEventListener() {
     const edits = Array.from(document.getElementsByClassName('edit'))
     edits.forEach(edit => {
         edit.addEventListener('dblclick', function red(e) {
-            e.stopImmediatePropagation
             loginToEdit()
             document.getElementById('quillContainer').setAttribute('style', 'display:block;')
             editWord = 0
@@ -209,31 +238,48 @@ function editEventListener() {
 
 // submit quill content
 const submitBtn = document.getElementById('submit')
+if (submitBtn !== null) {
 submitBtn.addEventListener('click', function (e) {
     e.stopImmediatePropagation()
     document.getElementById('quillContainer').setAttribute('style', 'display:none;')
     document.getElementById('editBtns').style.display = 'none';
     createSubmits()
 })
+}
 
 // delete button
 const deleteBtn = document.getElementById('delete')
+if (deleteBtn !== null) {
 deleteBtn.addEventListener('click', () => {
     const elementId = editWord
     onDelete(elementId, 1)
 })
+}
 
 // begins story 
 const beginStory = document.getElementById('beginStory')
+if (beginStory !== null) {
 beginStory.addEventListener('click', () => {
     document.getElementById('quillContainer').setAttribute('style', 'display:block;')
     document.getElementById('editBtns').style.display = 'block';
 })
+}
+
+function onQuillCreate() {
+    document.querySelector('.ql-editor').addEventListener('keydown', (e) => {
+        let characterCounter = document.querySelector('#charCounter')
+        console.log(e)
+        console.log(characterCounter.split(':')[1])
+        // characterCounter.textContent = `Characters Remaining Today: ${characterCounter.split(':')[1] - 1}`;
+    })
+}
 
 //===================================On Page Load===================================
-onOpen()
-viewStory(1)
-
+if (document.location.pathname === '/') {
+    onOpen()
+    viewStory(1)
+    newQuill()
+}
 function adminDelete(story_id) {
     console.log('admin')
     for (let i =0; i<500; i++) {
