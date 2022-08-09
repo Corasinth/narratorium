@@ -1,36 +1,52 @@
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap');
 
-html {
+/* ================ GENERAL =============== */
+/* * {
+    border: red solid 1px;
+} */
+
+/* html {
     margin-top: 40px;
-}
+} */
 
 body {
     height: 100vh;
+    /* display:flex; 
+    flex-direction:column;  */
 }
 
 a {
     text-decoration: none;
 }
 
-/* navbar */
+/* ================ NAVBAR =============== */
 .navbar {
     position: sticky;
+    top:0;
+    display: flex;
+    flex-direction: row;
+    align-items: center ;
+    border-bottom: solid black 1px; 
+    justify-content: space-between;
+    background-color: white;
 }
 
 .u-text-center {
     text-align: center !important;
 }
 
-.navbar-title,
 .navbar-link {
     text-transform: uppercase;
     font-size: 1em;
     font-weight: 600;
     letter-spacing: .2rem;
-    margin-right: 35px;
     text-decoration: none;
-    line-height: 6.5rem;
+    /* line-height: 6.5rem; */
     color: #222;
+}
+
+#logoutbutton {
+    margin-bottom: 0;
 }
 
 /* Title */
@@ -40,83 +56,28 @@ h2 {
     margin-bottom: 15px;
     color: #222;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 400;
     letter-spacing: .2rem;
     text-decoration: none;
 }
 
-/* title, title_p, story title */
-.align-center {
-    text-align: center;
+.logx {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-/* #navbar-section-1 {
-    display: flex;
-    flex-wrap: row;
-    justify-content: start;
-    padding: 2em;
-}
-
-#navbar-section-2 {
-    display: flex;
-    flex-wrap: row;
-    justify-content: end;
-    padding: 2em;
-} */
 
 .align-right {
     text-align: right;
     margin-left: 70%;
     padding: 15px;
 }
-/* Quill Div */
-#quillContainer,
-.ql-editor {
-    height: 5em;
-    background-color: snow;
-}
 
-.ql-editor {
-    height: 5em;
-    color: blue;
-}
-
-#editBtns{
-    margin: 2.5em 0;
-}
-
-
-/* getStarted button */
-.u-center-block {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 75%;
-}
-/* story title */
-h3 {
-    margin-top: 1.5em;
-}
-
-/* story */
-#story {
-    margin: 1.5em;
-    font-family: 'Lora', serif;
-    font-weight: 500;
-    font-size: 1.75em;
-}
-
-/* quill container (toolbar and editor) */
-/* Quill editor */
+/* ================ QUILL =============== */
 #quillContainer {
     position: sticky;
     top: 0;
-}
-
-footer {
-    position: fixed;
-    bottom: 40px;
-    width: 100%;
 }
 
 .align-right {
@@ -133,3 +94,60 @@ footer {
     -ms-transform: translateY(-50%, -50%);
     transform: translateY(-50%, -50%);
 }
+
+/* Quill Div */
+#quillContainer,
+.ql-editor {
+    height: 5em;
+    background-color: snow;
+}
+
+.ql-editor {
+    height: 5em;
+    color: blue;
+}
+
+#editBtns{
+    margin: 2.5em 0;
+}
+
+/* getStarted button */
+.u-center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+}
+
+/* ================ STORY =============== */
+
+/* story title */
+h3 {
+    margin-top: 1.5em;
+}
+
+/* title, title_p, story title */
+.align-center {
+    text-align: center;
+}
+
+#story {
+    margin: 1.5em;
+    font-family: 'Lora', serif;
+    font-weight: 500;
+    font-size: 1.2em;
+}
+
+
+/* ================ FOOTER =============== */
+
+footer {
+    background-color: rgb(165, 165, 165);
+    height: 5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    position: absolute;
+    width:100%;
+ }

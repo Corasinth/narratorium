@@ -60,7 +60,7 @@ function onDelete(position, story_id) {
     //deletes html element with id of position
     socket.emit('deletion', position, user_id, story_id, (response) => {
         if (response.status[0] === true) {
-            setDeleteLimit(response.status[1]);
+            setDelLimit(response.status[1]);
         } else if (response.status[0] === false) {
             alert("You've run out of deletes! Please try again tomorrow");
         } else {
