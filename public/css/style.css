@@ -22,21 +22,21 @@ a {
     display: flex;
     flex-direction: row;
     align-items: center ;
+    border-bottom: solid black 1px; 
+    justify-content: space-between;
 }
 
 .u-text-center {
     text-align: center !important;
 }
 
-.navbar-title,
 .navbar-link {
     text-transform: uppercase;
     font-size: 1em;
     font-weight: 600;
     letter-spacing: .2rem;
-    margin-right: 35px;
     text-decoration: none;
-    line-height: 6.5rem;
+    /* line-height: 6.5rem; */
     color: #222;
 }
 
@@ -51,30 +51,20 @@ h2 {
     margin-bottom: 15px;
     color: #222;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 400;
     letter-spacing: .2rem;
     text-decoration: none;
+}
+
+.logx {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /* title, title_p, story title */
 .align-center {
     text-align: center;
-}
-
-#navbar-section-1 {
-    display: flex;
-    flex-wrap: row;
-    justify-content: start;
-    padding: 2em;
-    align-items: center;
-}
-
-#navbar-section-2 {
-    display: flex;
-    flex-wrap: row;
-    justify-content: end;
-    align-items: center;
-    padding: 2em;
 }
 
 .align-right {
