@@ -253,7 +253,7 @@ if (beginStory !== null) {
 }
 
 function onQuillCreate() {
-    document.querySelector('.ql-editor').addEventListener('keyup', () => {
+    quill.on('text-change', () => {
         let characterCounter = document.querySelector('#charCounter')
         let editor = document.querySelector('.ql-editor')
         if (editor.textContent.length > editor.dataset.textlength) {
