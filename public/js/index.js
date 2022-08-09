@@ -160,6 +160,7 @@ async function newQuill() {
     toolbar.appendChild(deleteCounter);
     //Call this here so the DOM elements the event listener attatches to are created before the listener is created
     onQuillCreate()
+    });
 }
 
 // Transforms/submits user input into Quill editor for db submission and page rendering  
@@ -202,6 +203,7 @@ function editEventListener() {
         edit.addEventListener('dblclick', function red(e) {
             loginToEdit()
             document.getElementById('quillContainer').setAttribute('style', 'display:block;')
+            quill.setText('\n');
             editWord = 0
             const elementId = e.target.id
             editWord += elementId
