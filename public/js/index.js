@@ -8,10 +8,10 @@ let url
 if (window.location.hostname === 'localhost') {
     url = 'http://localhost:3001'
 } else {
-    url = 'https://narratorium.herokuapp.com' 
+    url = 'https://narratorium.herokuapp.com'
 }
 
-const socket = io(url) 
+const socket = io(url)
 let quill;
 
 const quillContainer = document.getElementById('quillContainer')
@@ -22,9 +22,10 @@ socket.on('connect', () => {
 
 socket.on('displayStory', (data) => {
     let render = []
-    if (data === null) {
+    if (data === null) {    
         return;
     }
+    
     for (let i = 0; i < data.submissions.length; i++) {
         let createSubmit = `<span id=${data.submissions[i].position} class="edit">${data.submissions[i].submission} </span>`
         render.push(createSubmit)
@@ -42,7 +43,7 @@ function onSubmit(submissionText, position, story_id) {
     socket.emit('submission', submissionText, position, user_id, story_id, (response) => {
         if (response.status[0] === true) {
             setCharLimit(response.status[1])
-        } else if (response.status[0] === false) {
+        } else if (response.status === false) {
             alert("You've run out of characters to type! Please try again tomorrow.")
         } else {
             console.log(response);
@@ -66,7 +67,7 @@ function onDelete(position, story_id) {
 
 //Call this function when the user navigates to a story
 function viewStory(story_id) {
-    socket.emit('viewStory', story_id, (response)=> {
+    socket.emit('viewStory', story_id, (response) => {
         console.log(response)
     })
 }
@@ -123,11 +124,19 @@ async function onOpen() {
 
 //===================================Regular Functions===================================
 function setCharLimit(charactersRemaining) {
+    if (typeof charactersRemaining !== 'number' || Number.isNaN(charactersRemaining)) {
+        charactersRemaining = 0
+    }
+
     let characterCounter = document.querySelector('#charCounter')
     characterCounter.textContent = `Characters Remaining Today: ${charactersRemaining}`;
 }
 
 function setDelLimit(deletesRemaining) {
+    if (typeof deletesRemaining !== 'number' || Number.isNaN(deletesRemaining)) {
+        charactersRemaining = 0
+    }
+
     let deleteCounter = document.querySelector('#delCounter')
     deleteCounter.textContent = `Deletes Remaining Today: ${deletesRemaining}`;
 }
@@ -142,7 +151,6 @@ function editSubmits(elementId = 1) {
     let editorDataAttribute = document.querySelector("#editor-container")
     editorDataAttribute.setAttribute("data-position", elementId)
 }
-
 
 // creates an instance of Quill editor
 async function newQuill() {
@@ -160,8 +168,8 @@ async function newQuill() {
     toolbar.appendChild(deleteCounter);
     //Call this here so the DOM elements the event listener attatches to are created before the listener is created
     onQuillCreate()
-    });
-}
+};
+
 
 // Transforms/submits user input into Quill editor for db submission and page rendering  
 function createSubmits() {
@@ -190,7 +198,7 @@ function loginToEdit() {
         quill.setText('Login or Get Started to narrate\n')
         document.getElementById('submit').disabled = true;
         document.getElementById('delete').disabled = true;
-    } 
+    }
 }
 
 //===================================Event Listeners===================================
@@ -216,42 +224,42 @@ function editEventListener() {
 // submit quill content
 const submitBtn = document.getElementById('submit')
 if (submitBtn !== null) {
-submitBtn.addEventListener('click', function (e) {
-    e.stopImmediatePropagation()
-    document.getElementById('quillContainer').setAttribute('style', 'display:none;')
-    document.getElementById('editBtns').style.display = 'none';
-    createSubmits()
-})
+    submitBtn.addEventListener('click', function (e) {
+        e.stopImmediatePropagation()
+        document.getElementById('quillContainer').setAttribute('style', 'display:none;')
+        document.getElementById('editBtns').style.display = 'none';
+        createSubmits()
+    })
 }
 
 // delete button
 const deleteBtn = document.getElementById('delete')
 if (deleteBtn !== null) {
-deleteBtn.addEventListener('click', () => {
-    const elementId = editWord
-    onDelete(elementId, 1)
-})
+    deleteBtn.addEventListener('click', () => {
+        const elementId = editWord
+        onDelete(elementId, 1)
+    })
 }
 
 // begins story 
 const beginStory = document.getElementById('beginStory')
 if (beginStory !== null) {
-beginStory.addEventListener('click', () => {
-    document.getElementById('quillContainer').setAttribute('style', 'display:block;')
-    document.getElementById('editBtns').style.display = 'block';
-})
+    beginStory.addEventListener('click', () => {
+        document.getElementById('quillContainer').setAttribute('style', 'display:block;')
+        document.getElementById('editBtns').style.display = 'block';
+    })
 }
 
 function onQuillCreate() {
     document.querySelector('.ql-editor').addEventListener('keyup', () => {
         let characterCounter = document.querySelector('#charCounter')
         let editor = document.querySelector('.ql-editor')
-        if (editor.textContent.length>editor.dataset.textlength) {
+        if (editor.textContent.length > editor.dataset.textlength) {
             let value = characterCounter.textContent.split(':')[1]
-            setCharLimit(parseInt(value)-1)            
-        } else if (editor.textContent.length<editor.dataset.textlength) {
+            setCharLimit(parseInt(value) - 1)
+        } else if (editor.textContent.length < editor.dataset.textlength) {
             let value = characterCounter.textContent.split(':')[1]
-            setCharLimit(parseInt(value)+1)            
+            setCharLimit(parseInt(value) + 1)
         }
         editor.setAttribute('data-textlength', editor.textContent.length);
     })
@@ -265,7 +273,7 @@ if (document.location.pathname === '/') {
 }
 function adminDelete(story_id) {
     console.log('admin')
-    for (let i =0; i<500; i++) {
+    for (let i = 0; i < 500; i++) {
         onDelete(i, story_id)
     }
 }

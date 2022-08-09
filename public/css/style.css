@@ -146,10 +146,6 @@ align-content: center;
 }
 
 /* ================ BUTTONS =============== */
-#editBtns{
-    margin: 2.5em 0;
-    display:none;
-}
 
 /* getStarted button */
 .u-center-block {
