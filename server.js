@@ -1,6 +1,6 @@
 //Limit Values
 const charLimit = 100;
-const delLimit = 100; 
+const delLimit = 100;
 // Import packages
 const { createServer } = require("http");
 const { Server } = require("socket.io");
@@ -94,11 +94,11 @@ io.on("connection", async (socket) => {
         try {
             let userData = await User.findOne({
                 where: {
-                    id:user_id
+                    id: user_id
                 }
             })
             if (!(userData.character_limit === charLimit && userData.delete_limit === delLimit)) {
-                response ({
+                response({
                     status: 'fail'
                 })
                 return;
@@ -145,7 +145,7 @@ io.on("connection", async (socket) => {
             });
             const userData = await User.findOne({
                 where: {
-                    id:user_id
+                    id: user_id
                 }
             })
             const currentCharLimit = userData.character_limit - submissionArray.length
@@ -184,7 +184,7 @@ io.on("connection", async (socket) => {
             response({
                 status: err
             })
-        };  
+        };
     });
     //Takes in the position of the word deleted and adjusts the database accordingly.
     socket.on('deletion', async (position, user_id, story_id, response) => {
@@ -240,7 +240,11 @@ io.on("connection", async (socket) => {
         };
     })
     socket.on('newDayDetection', async (currentDate, response) => {
-        await User.update({ character_limit: charLimit, delete_limit: delLimit, last_logged_in: currentDate });
+        await User.update({ character_limit: charLimit, delete_limit: delLimit, last_logged_in: currentDate }, {
+            where: {
+                id: Boolean(this.id)
+            }
+        });
         response({
             status: [charLimit, delLimit]
         })

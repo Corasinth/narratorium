@@ -22,6 +22,9 @@ socket.on('connect', () => {
 
 socket.on('displayStory', (data) => {
     let render = []
+    if (data === null) {
+        return;
+    }
     for (let i = 0; i < data.submissions.length; i++) {
         let createSubmit = `<span id=${data.submissions[i].position} class="edit">${data.submissions[i].submission} </span>`
         render.push(createSubmit)
