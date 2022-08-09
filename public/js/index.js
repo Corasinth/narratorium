@@ -102,24 +102,12 @@ async function onOpen() {
     }
     document.getElementById('submit').disabled = false;
     document.getElementById('delete').disabled = false;
-    const response = await fetch(`/api/users/${user_id}`)
-    const userData = await response.json()
-    let currentDate = new Date(Date.now()).toISOString();
-    let currentDay = currentDate[8] + currentDate[9]
-    if (userData.last_logged_in === null || `${userData.last_logged_in[8]}${userData.last_logged_in[9]}` < currentDay) {
-        socket.emit('newDayDetection', currentDate, (response) => {
-            let numOfCharacters = response[0];
-            let numOfDeletes = response[1];
+    socket.emit('newDayDetection', user_id, (response) => {
+            let numOfCharacters = response[1];
+            let numOfDeletes = response[2];
             setCharLimit(numOfCharacters);
             setDelLimit(numOfDeletes);
         })
-    } else {
-        let numOfCharacters = userData.character_limit;
-        let numOfDeletes = userData.delete_limit;
-        // console.log(`We have ${numOfCharacters} characters left to type and ${numOfDeletes} left to delete.`)
-        setCharLimit(numOfCharacters);
-        setDelLimit(numOfDeletes);
-    }
 }
 
 //===================================Regular Functions===================================
