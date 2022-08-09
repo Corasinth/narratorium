@@ -242,15 +242,38 @@ io.on("connection", async (socket) => {
             })
         };
     })
-    socket.on('newDayDetection', async (currentDate, response) => {
-        await User.update({ character_limit: charLimit, delete_limit: delLimit, last_logged_in: currentDate }, {
-            where: {
-                id: Boolean(this.id)
+    socket.on('newDayDetection', async (user_id, response) => {
+        try {
+            let currentDate = new Date(Date.now()).toISOString();
+            let currentDay = currentDate[8] + currentDate[9]
+            let currentMonth = currentDate[5] + currentDate[6]
+            const userData = await User.findOne({
+                where: {
+                    id: user_id
+                }
+            })
+            //Checks if it needs to update the users limits, and if so send back the reset limits.
+            if (userData.last_logged_in === null || `${userData.last_logged_in[8]}${userData.last_logged_in[9]}` < currentDay || `${userData.last_logged_in[5]}${userData.last_logged_in[6]}` < currentMonth) {
+                await User.update({ character_limit: charLimit, delete_limit: delLimit, last_logged_in: currentDate }, {
+                    where: {
+                        id: {
+                            [Op.gt]: 0
+                        }
+                    }
+                });
+                response({
+                    status: [charLimit, delLimit]
+                })
+            } else {
+                response({
+                    status: [userData.character_limit, userData.delete_limit]
+                })
             }
-        });
-        response({
-            status: [charLimit, delLimit]
-        })
+        } catch (err) {
+            response({
+                status: err
+            })
+        }
     })
 });
 
