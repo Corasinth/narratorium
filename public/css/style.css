@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap');
 
+/* ================ GENERAL =============== */
 /* * {
     border: red solid 1px;
 } */
@@ -15,7 +16,7 @@ a {
     text-decoration: none;
 }
 
-/* navbar */
+/* ================ NAVBAR =============== */
 .navbar {
     position: sticky;
     top:0;
@@ -62,9 +63,17 @@ h2 {
     justify-content: center;
 }
 
-/* title, title_p, story title */
-.align-center {
-    text-align: center;
+
+.align-right {
+    text-align: right;
+    margin-left: 70%;
+    padding: 15px;
+}
+
+/* ================ QUILL =============== */
+#quillContainer {
+    position: sticky;
+    top: 0;
 }
 
 .align-right {
@@ -72,6 +81,16 @@ h2 {
     margin-left: 70%;
     padding: 15px;
 }
+
+.center-btn {
+    margin: 0;
+    position: absolute;
+    top: 70%;
+    left: 25%;
+    -ms-transform: translateY(-50%, -50%);
+    transform: translateY(-50%, -50%);
+}
+
 /* Quill Div */
 #quillContainer,
 .ql-editor {
@@ -95,12 +114,19 @@ h2 {
     margin-right: auto;
     width: 75%;
 }
+
+/* ================ STORY =============== */
+
 /* story title */
 h3 {
     margin-top: 1.5em;
 }
 
-/* story */
+/* title, title_p, story title */
+.align-center {
+    text-align: center;
+}
+
 #story {
     margin: 1.5em;
     font-family: 'Lora', serif;
@@ -108,30 +134,8 @@ h3 {
     font-size: 1.2em;
 }
 
-/* quill container (toolbar and editor) */
-/* Quill editor */
-#quillContainer {
-    position: sticky;
-    top: 0;
-}
 
+/* ================ FOOTER =============== */
 footer {
-    position: fixed;
-    bottom: 40px;
-    width: 100%;
-}
-
-.align-right {
-    text-align: right;
-    margin-left: 70%;
-    padding: 15px;
-}
-
-.center-btn {
-    margin: 0;
-    position: absolute;
-    top: 70%;
-    left: 25%;
-    -ms-transform: translateY(-50%, -50%);
-    transform: translateY(-50%, -50%);
+    background-color: rgb(165, 165, 165);
 }
