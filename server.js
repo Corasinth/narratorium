@@ -62,7 +62,7 @@ app.use(routes);
 // Set up sockets
 io.on("connection", async (socket) => {
     console.log(socket.id)
-    socket.on('viewStory', async (story_id) => {
+    socket.on('viewStory', async (story_id, response) => {
         try {
             const storyData = await Story.findByPk(story_id, {
                 include: [{
@@ -73,7 +73,9 @@ io.on("connection", async (socket) => {
             });
             io.emit('displayStory', storyData)
         } catch (err) {
-            io.emit('error', err)
+            response ({
+                status: err
+            })
         }
     })
     //Takes in title and creates a new story
@@ -149,13 +151,13 @@ io.on("connection", async (socket) => {
                 }
             })
             const currentCharLimit = userData.character_limit - submissionArray.length
-            // if (currentCharLimit < 0 ) {
-            //     response ({
-            //         status: false
-            //     })
-            //     return;
-            // } 
-            //Updates the users daily limit to ensure database is up to date
+            if (currentCharLimit < 0 ) {
+                response ({
+                    status: false
+                })
+                return;
+            } 
+            // Updates the users daily limit to ensure database is up to date
             await User.decrement('character_limit', {
                 by: submission.length,
                 where: {
@@ -176,7 +178,8 @@ io.on("connection", async (socket) => {
                 }],
             });
             io.emit('displayStory', storyData)
-            x()//remove
+            // x()
+            console.log(currentCharLimit)
             response({
                 status: [true, currentCharLimit]
             })
@@ -196,12 +199,12 @@ io.on("connection", async (socket) => {
                 }
             })
             const currentDelLimit = userData.delete_limit - 1
-            // if (currentDelLimit < 0 ) {
-            //     response ({
-            //         status: false
-            //     })
-            //     return;
-            // } 
+            if (currentDelLimit < 0 ) {
+                response ({
+                    status: false
+                })
+                return;
+            } 
             await Submission.destroy({
                 where: {
                     position: position
@@ -229,7 +232,7 @@ io.on("connection", async (socket) => {
                 }
             });
             io.emit('displayStory', storyData)
-            x()//remove
+            // x()
             response({
                 status: [true, currentDelLimit]
             })
@@ -251,10 +254,10 @@ io.on("connection", async (socket) => {
     })
 });
 
-async function x() {
-    const submissionsData = await Submission.findAll()
-    io.emit("test", submissionsData)
-}
+// async function x() {
+//     const submissionsData = await Submission.findAll()
+//     io.emit("test", submissionsData)
+// }
 
 // Sync database and start listening
 sequelize.sync({ force: false }).then(() => httpServer.listen(PORT, () => {

@@ -37,16 +37,11 @@ socket.on('displayStory', (data) => {
     renderStoryToHomepage(render)
 })
 
-//test function
-socket.on("test", (data) => {
-    console.table(data)
-})
-
 //Call this function when a user makes a submission
 function onSubmit(submissionText, position, story_id) {
     socket.emit('submission', submissionText, position, user_id, story_id, (response) => {
         if (response.status[0] === true) {
-            setCharLimit(response[1])
+            setCharLimit(response.status[1])
         } else if (response.status[0] === false) {
             alert("You've run out of characters to type! Please try again tomorrow.")
         } else {
@@ -71,7 +66,9 @@ function onDelete(position, story_id) {
 
 //Call this function when the user navigates to a story
 function viewStory(story_id) {
-    socket.emit('viewStory', story_id)
+    socket.emit('viewStory', story_id, (response)=> {
+        console.log(response)
+    })
 }
 
 //Call this function when the user renames a story
@@ -92,7 +89,6 @@ function renameStory(newName, story_id) {
 //Call this function when the user adds a story
 function addStory(storyName) {
     socket.emit('addStory', storyName, (response) => {
-        //TODO Function for adding a new story, place any relevant HTML changes here
         console.log(response)
     })
 }
@@ -103,6 +99,8 @@ async function onOpen() {
     if (user_id === '') {
         return;
     }
+    document.getElementById('submit').disabled = false;
+    document.getElementById('delete').disabled = false;
     const response = await fetch(`/api/users/${user_id}`)
     const userData = await response.json()
     let currentDate = new Date(Date.now()).toISOString();
@@ -117,7 +115,7 @@ async function onOpen() {
     } else {
         let numOfCharacters = userData.character_limit;
         let numOfDeletes = userData.delete_limit;
-        console.log(`We have ${numOfCharacters} characters left to type and ${numOfDeletes} left to delete.`)
+        // console.log(`We have ${numOfCharacters} characters left to type and ${numOfDeletes} left to delete.`)
         setCharLimit(numOfCharacters);
         setDelLimit(numOfDeletes);
     }
@@ -125,7 +123,6 @@ async function onOpen() {
 
 //===================================Regular Functions===================================
 function setCharLimit(charactersRemaining) {
-    //TODO Code to set counters on HTML goes here! 
     let characterCounter = document.querySelector('#charCounter')
     characterCounter.textContent = `Characters Remaining Today: ${charactersRemaining}`;
 }
@@ -147,35 +144,13 @@ function editSubmits(elementId = 1) {
 }
 
 
-var toolbarOptions = [
-  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-  ['blockquote', 'code-block'],
-
-  [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-  [{ 'direction': 'rtl' }],                         // text direction
-
-  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-  [{ 'font': [] }],
-  [{ 'align': [] }],
-
-  ['clean'],                                         // remove formatting button
-  ['omega']
-];
 // creates an instance of Quill editor
 async function newQuill() {
     quill = await new Quill('#editor-container', {
-        // modules: {
-        //     toolbar: toolbarOptions
-        // },
         theme: 'snow',
     },
     );
+    document.querySelector('.ql-editor').setAttribute('data-textlength', '0')
     const toolbar = document.querySelector('.ql-toolbar');
     const characterCounter = document.createElement('span');
     const deleteCounter = document.createElement('span');
@@ -266,11 +241,17 @@ beginStory.addEventListener('click', () => {
 }
 
 function onQuillCreate() {
-    document.querySelector('.ql-editor').addEventListener('keydown', (e) => {
+    document.querySelector('.ql-editor').addEventListener('keyup', () => {
         let characterCounter = document.querySelector('#charCounter')
-        console.log(e)
-        console.log(characterCounter.split(':')[1])
-        // characterCounter.textContent = `Characters Remaining Today: ${characterCounter.split(':')[1] - 1}`;
+        let editor = document.querySelector('.ql-editor')
+        if (editor.textContent.length>editor.dataset.textlength) {
+            let value = characterCounter.textContent.split(':')[1]
+            setCharLimit(parseInt(value)-1)            
+        } else if (editor.textContent.length<editor.dataset.textlength) {
+            let value = characterCounter.textContent.split(':')[1]
+            setCharLimit(parseInt(value)+1)            
+        }
+        editor.setAttribute('data-textlength', editor.textContent.length);
     })
 }
 
