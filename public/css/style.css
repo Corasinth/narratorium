@@ -11,6 +11,8 @@
 
 body {
     height: 100vh;
+    /* display:flex; 
+    flex-direction:column;  */
 }
 
 a {
@@ -26,6 +28,7 @@ a {
     align-items: center ;
     border-bottom: solid black 1px; 
     justify-content: space-between;
+    background-color: white;
 }
 
 .u-text-center {
@@ -137,6 +140,7 @@ h3 {
 
 
 /* ================ FOOTER =============== */
+
 footer {
     background-color: rgb(165, 165, 165);
     height: 5em;
@@ -145,7 +149,5 @@ footer {
     justify-content: space-evenly;
     align-items: center;
     position: absolute;
-    bottom:0;
-    left: 0;
-    right: 0;
+    width:100%;
  }
