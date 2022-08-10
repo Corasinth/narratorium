@@ -10,7 +10,7 @@ The site can be accessed [here](https://narratorium.herokuapp.com/).
 * Password - literati
 
 # 
-# [![A video thumbnail shows the homepage of the NARRATORIUM application with a play button overlaying the view.](./public/images/demo_video.png)](https://user-images.githubusercontent.com/102924713/183820514-704c1e23-6693-48f4-ab18-77de0a7ed6d3.mp4)
+# [![A video thumbnail shows the homepage of the NARRATORIUM application with a play button overlaying the view.](./public/images/demo_video_image.png)](https://user-images.githubusercontent.com/102924713/183820514-704c1e23-6693-48f4-ab18-77de0a7ed6d3.mp4)
 
 ## Table of Contents
 
