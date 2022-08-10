@@ -21,7 +21,6 @@ socket.on('connect', () => {
 });
 
 socket.on('displayStory', (data) => {
-    console.log(data);
     let render = [];
     if (data === null) {
         return;
@@ -65,9 +64,10 @@ function onSubmit(submissionText, position, story_id) {
 function onDelete(position, story_id) {
     //deletes html element with id of position
     socket.emit('deletion', position, user_id, story_id, (response) => {
+        console.log(response)
         if (response.status[0] === true) {
             setDelLimit(response.status[1]);
-        } else if (response.status[0] === false) {
+        } else if (response.status === false) {
             alert("You've run out of deletes! Please try again tomorrow");
         } else {
             console.error(response);
@@ -113,8 +113,8 @@ async function onOpen() {
     document.getElementById('submit').disabled = false;
     document.getElementById('delete').disabled = false;
     socket.emit('newDayDetection', user_id, (response) => {
-        let numOfCharacters = response.status[1];
-        let numOfDeletes = response.status[2];
+        let numOfCharacters = response.status[0];
+        let numOfDeletes = response.status[1];
         setCharLimit(numOfCharacters);
         setDelLimit(numOfDeletes);
     });
@@ -273,10 +273,3 @@ if (document.location.pathname === '/') {
     viewStory(1);
     newQuill();
 }
-
-function adminDelete(story_id) {
-    for (let i = 0; i < 500; i++) {
-        onDelete(i, story_id);
-    }
-}
-
