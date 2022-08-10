@@ -11,14 +11,17 @@ Submission.init(
       primaryKey: true,
       autoIncrement: true,
     },
+    // Text content of the submission
     submission: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    // Position of the submission relative to other words in the story
     position: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    // ID of this submission's author 
     user_id: {
       type: DataTypes.INTEGER,
       references: {
@@ -26,6 +29,7 @@ Submission.init(
         key: 'id',
       },
     },
+    // ID of the story this submission belongs to
     story_id: {
       type: DataTypes.INTEGER,
       references: {

@@ -11,14 +11,15 @@ Submission.belongsTo(User, {
   foreignKey: 'user_id'
 });
 
+Story.hasMany(Submission, {
+  foreignKey: 'story_id',
+  onDelete: 'CASCADE'
+});
+
 Submission.belongsTo(Story, {
   foreignKey: 'story_id',
   onDelete: 'CASCADE'
 })
 
-Story.hasMany(Submission, {
-  foreignKey: 'story_id',
-  onDelete: 'CASCADE'
-});
 
 module.exports = { User, Story, Submission };

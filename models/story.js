@@ -1,7 +1,7 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Story extends Model { }
+class Story extends Model {}
 
 Story.init(
   {
@@ -11,6 +11,7 @@ Story.init(
       primaryKey: true,
       autoIncrement: true,
     },
+    // Name of the story
     storyname: {
       type: DataTypes.STRING,
       allowNull: false,
