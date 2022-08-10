@@ -4,8 +4,8 @@ require('dotenv').config();
 
 let sequelize;
 
-// Connects to Jaws DB if deployed on Heroku, 
-// otherwise connects to local MySQL server using env variables
+// Connects to Jaws DB if deployed on Heroku
+// Otherwise connects to local MySQL server using env variables
 if (process.env.JAWSDB_URL) {
     sequelize = new Sequelize(process.env.JAWSDB_URL);
 } else {

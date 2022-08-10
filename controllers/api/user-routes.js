@@ -66,7 +66,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 
-// "/api/users/login" post login user
+// "/api/users/login" POST route for user login
 router.post("/login", async (req, res) => {
     try {
         // Find a user by username OR email
@@ -87,6 +87,7 @@ router.post("/login", async (req, res) => {
                 res.status(404).json({ message: "Incorrect password" });
                 return;
             } else {
+                // Login by saving user_id and loggedIn to session storage
                 req.session.save(() => {
                     req.session.user_id = userData.id;
                     req.session.loggedIn = true;
@@ -99,7 +100,7 @@ router.post("/login", async (req, res) => {
     }
 });
 
-// "/api/users/logout" post logout user
+// "/api/users/logout" POST route for user logout
 router.post("/logout", (req, res) => {
     if (req.session.loggedIn) {
         req.session.destroy(() => {
