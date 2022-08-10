@@ -1,14 +1,18 @@
+// Handler for logout button
 const logout = async () => {
-  const response = await fetch('/api/users/logout', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-  });
+    // Sends a logout request to server
+    const response = await fetch('/api/users/logout', {
+        method: 'POST',
+    });
 
-  if (response.ok) {
-    document.location.replace('/');
-  } else {
-    alert('Failed to log out');
-  }
+    // Redirects to homepage if successful
+    if (response.ok) {
+        document.location.replace('/');
+    } else {
+        // Otherwise, alerts the user
+        alert('Failed to log out');
+    }
 };
 
+// Event listener for logout button
 document.querySelector('#logout').addEventListener('click', logout);
