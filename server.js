@@ -64,7 +64,11 @@ io.on("connection", async (socket) => {
                 include: [{
                     model: Submission,
                     separate: true,
-                    order: [['position', 'ASC']]
+                    order: [['position', 'ASC']],
+                    include: [{
+                        model: User,
+                        attributes: ['username']
+                    }]
                 }],
             });
             io.emit('displayStory', storyData);
@@ -174,7 +178,11 @@ io.on("connection", async (socket) => {
                 include: [{
                     model: Submission,
                     separate: true,
-                    order: [['position', 'ASC']]
+                    order: [['position', 'ASC']],
+                    include: [{
+                        model: User,
+                        attributes: ['username']
+                    }]
                 }],
             });
             io.emit('displayStory', storyData);
@@ -228,7 +236,11 @@ io.on("connection", async (socket) => {
                 include: [{
                     model: Submission,
                     separate: true,
-                    order: [['position', 'ASC']]
+                    order: [['position', 'ASC']],
+                    include: [{
+                        model: User,
+                        attributes: ['username']
+                    }]
                 }],
             });
             io.emit('displayStory', storyData);

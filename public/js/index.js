@@ -21,12 +21,25 @@ socket.on('connect', () => {
 });
 
 socket.on('displayStory', (data) => {
+    console.log(data);
     let render = [];
     if (data === null) {
         return;
     }
     for (let i = 0; i < data.submissions.length; i++) {
-        let createSubmit = `<span id=${data.submissions[i].position} class="edit">${data.submissions[i].submission}</span>`;
+        let createSubmit = document.createElement("span");
+        createSubmit.className = "edit";
+        createSubmit.id = data.submissions[i].position;
+        createSubmit.textContent = data.submissions[i].submission + " ";
+
+        const username = data.submissions[i].user.username;
+        const timestamp = new Date(data.submissions[i].createdAt).toLocaleString("en-US");
+        tippy(createSubmit, {
+            trigger: "click",
+            allowHTML: true,
+            content: `Written by: ${username} on ${timestamp}`,
+            distance: "0.2rem",
+        })
         render.push(createSubmit);
     }
     data.submissions.length === 0
@@ -132,7 +145,8 @@ function setDelLimit(deletesRemaining) {
  * @param {Array<string>} render  array of HTML elements which makes up the story
 */
 function renderStoryToHomepage(render) {
-    document.getElementById('story').innerHTML = render.join(' ');
+    document.getElementById('story').innerHTML = '';
+    document.getElementById('story').append(...render);
     editEventListener();
 }
 
@@ -180,17 +194,6 @@ function contentFunc(object) {
     return objectStr;
 }
 
-// Prevents users that aren't logged in from adding or deleting
-function loginToEdit() {
-    if (!user_id) {
-        alert('You are not logged in!');
-        document.getElementById('quillContainer').setAttribute('style', 'display:none;');
-        quill.setText('Login or Get Started to narrate\n');
-        document.getElementById('submit').disabled = true;
-        document.getElementById('delete').disabled = true;
-    }
-}
-
 //===================================Event Listeners===================================
 
 let editWord = 0;
@@ -199,8 +202,14 @@ function editEventListener() {
     const edits = Array.from(document.getElementsByClassName('edit'));
     edits.forEach(edit => {
         edit.addEventListener('dblclick', function red(e) {
-            loginToEdit();
             document.getElementById('quillContainer').setAttribute('style', 'display:block;');
+            // Prevents users that aren't logged in from adding or deleting
+            if (!user_id) {
+                quill.setText('Login or Get Started to narrate\n');
+                document.getElementById('submit').disabled = true;
+                document.getElementById('delete').disabled = true;
+                return;
+            }
             quill.setText('\n');
             editWord = 0;
             const elementId = e.target.id;

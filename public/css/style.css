@@ -168,6 +168,11 @@ h2 {
     font-size: 1.2em;
 }
 
+.tippy-tooltip {
+    font-size: 1rem;
+    font-family: monospace;
+}
+
 /* ================ FOOTER =============== */
 .container {
     min-height: 85%;
