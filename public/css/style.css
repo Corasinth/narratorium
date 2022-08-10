@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap");
 
 /* ================ GENERAL =============== */
 /* * {
@@ -26,10 +26,11 @@ a {
     display: flex;
     flex-direction: row;
     align-items: center;
-    border-bottom: solid black 1px;
+    border-bottom: solid rgb(162, 162, 162) 1px;
     justify-content: space-between;
     background-color: white;
     z-index: 2;
+    padding: 2rem;
 }
 
 .u-text-center {
@@ -40,7 +41,7 @@ a {
     text-transform: uppercase;
     font-size: 1em;
     font-weight: 600;
-    letter-spacing: .2rem;
+    letter-spacing: 0.2rem;
     text-decoration: none;
     /* line-height: 6.5rem; */
     color: #222;
@@ -65,8 +66,9 @@ h2 {
     color: #222;
     text-transform: uppercase;
     font-weight: 400;
-    letter-spacing: .2rem;
+    letter-spacing: 0.2rem;
     text-decoration: none;
+    margin: 2rem 0;
 }
 
 .logx {
@@ -87,18 +89,14 @@ h2 {
     top: 0;
     display: none;
     min-height: 14rem;
-    margin-bottom: 14rem;
+    margin-bottom: 16rem;
     z-index: 0;
 }
 
-.push {
-    height: 14rem;
-}
-
 #editBtns {
-   padding: 3px;
-   background-color: rgb(165, 165, 165);
-   padding-top: 10px;
+    padding: 3px;
+    background-color: rgb(165, 165, 165);
+    padding-top: 10px;
 }
 
 .align-right {
@@ -117,14 +115,16 @@ h2 {
 }
 
 /* Quill Div */
-#quillContainer,.ql-toolbar,
+#quillContainer,
+.ql-toolbar,
 .ql-editor {
     height: 5em;
     background-color: snow;
 }
+
 .ql-toolbar {
-display: flex;
-align-content: center;    
+    display: flex;
+    align-content: center;
 }
 
 .ql-editor {
@@ -142,7 +142,7 @@ align-content: center;
 #delCounter {
     font-weight: bold;
     font-size: small;
-    margin: .5em;
+    margin: 0.5em;
 }
 
 /* ================ BUTTONS =============== */
@@ -163,15 +163,21 @@ align-content: center;
 
 #story {
     margin: 1.5em;
-    font-family: 'Lora', serif;
+    font-family: "Lora", serif;
     font-weight: 500;
     font-size: 1.2em;
+}
+
+.tippy-tooltip {
+    font-size: 1rem;
+    font-family: monospace;
 }
 
 /* ================ FOOTER =============== */
 .container {
     min-height: 85%;
 }
+
 footer {
     background-color: rgb(165, 165, 165);
     height: 5em;
@@ -187,6 +193,7 @@ footer {
     height: 7rem;
 }
 
+/* ================ MEDIA QUERIES =============== */
 @media screen and (max-width: 768px) {
     .navbar {
         flex-direction: column;
@@ -211,6 +218,7 @@ footer {
     .navbar {
         margin-top: -15px;
     }
+
     h1 {
         font-size: 3rem;
     }
