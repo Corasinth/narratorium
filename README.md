@@ -33,6 +33,8 @@ Character and delete limits reset every day; if you believe the limits should ha
 
 The site includes some key features that help encourage creativity over simply adding random text. Firstly, users must create an account and log in, and changes per day are limited. Users can add up to 100 characters a day and delete 10 words; these limits can be seen in the rich text edior on the site. The character counter is dynamic, while typing in the editor it changes to reflect how many characters you would have left if you submitted your changes, but your actual limit only alters on submission.
 
+The site also allows users to click on a word to display a brief tooltip showing the username of the submittor and a timestamp, so that anyone can peruse the variety of people who have contributed to the story. 
+
 The site also has the capacity to support several additional features, such as the ability to rename a story, add a story, and preserve the formatting of the text users submit. These features are currently under development.
 ***
 
