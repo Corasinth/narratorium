@@ -47,6 +47,47 @@ socket.on('displayStory', (data) => {
     renderStoryToHomepage(render);
 });
 
+socket.on('editStory', (data)=>{
+    console.log(data)
+    if (data === null) {
+        return;
+    }
+    let numOfSubmissions = document.querySelectorAll('.edit').length;
+    for (let i = data.submissions[0].position; i < numOfSubmissions; i++) {
+        let currentEl = document.getElementById(i);
+        console.log(currentEl)
+        currentEl.setAttribute('id', i+data.submissions.length)
+    }
+    let startElement = document.getElementById(data.submissions[0].position-1);
+    for (let i = 0; i < data.submissions.length; i++) {
+        let createSubmit = document.createElement("span");
+        createSubmit.className = "edit";
+        createSubmit.id = data.submissions[i].position;
+        createSubmit.textContent = data.submissions[i].submission + " ";
+
+        const username = data.submissions[i].user.username;
+        const timestamp = new Date(data.submissions[i].createdAt).toLocaleString("en-US");
+        tippy(createSubmit, {
+            trigger: "click",
+            allowHTML: true,
+            content: `Written by: ${username} on ${timestamp}`,
+            distance: "0.2rem",
+        })
+        if (Boolean(startElement)) {
+            startElement.insertAdjacentElement('afterend', createSubmit);
+        } else {
+            document.getElementById('story').append(createSubmit);
+        }
+    }
+    editEventListener();
+})
+function editStory (render, precedingPosition) {
+    for (let word of render) {
+        startElement.insertAdjacentElement('afterend', word)
+    }
+    editEventListener();
+}
+
 // Call this function when a user makes a submission
 function onSubmit(submissionText, position, story_id) {
     socket.emit('submission', submissionText, position, user_id, story_id, (response) => {
@@ -64,9 +105,14 @@ function onSubmit(submissionText, position, story_id) {
 function onDelete(position, story_id) {
     //deletes html element with id of position
     socket.emit('deletion', position, user_id, story_id, (response) => {
-        console.log(response)
         if (response.status[0] === true) {
+            document.getElementById(position).remove() 
             setDelLimit(response.status[1]);
+            let numOfSubmissions = document.querySelectorAll('.edit').length;
+            for (let i = position + 1; i < numOfSubmissions; i++) {
+                let currentEl = document.getElementById(i);
+                currentEl.setAttribute('id', i-1)
+            }
         } else if (response.status === false) {
             alert("You've run out of deletes! Please try again tomorrow");
         } else {
@@ -100,7 +146,11 @@ function renameStory(newName, story_id) {
 // Call this function when the user adds a story
 function addStory(storyName) {
     socket.emit('addStory', storyName, (response) => {
-        console.error(response);
+        if (response.status.storyname) {
+            console.log(response);
+        } else {
+            console.error(response);
+        }
     });
 }
 
@@ -213,7 +263,7 @@ function editEventListener() {
             quill.setText('\n');
             editWord = 0;
             const elementId = e.target.id;
-            editWord += elementId;
+            editWord += parseInt(elementId);
             editSubmits(elementId);
             document.getElementById('editBtns').style.display = 'block';
         });
