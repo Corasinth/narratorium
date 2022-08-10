@@ -147,7 +147,7 @@ io.on("connection", async (socket) => {
                     id: user_id
                 }
             });
-            const currentCharLimit = userData.character_limit - submissionArray.length;
+            const currentCharLimit = userData.character_limit - submission.length;
             if (currentCharLimit < 0) {
                 response({
                     status: false
