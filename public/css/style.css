@@ -26,10 +26,11 @@ a {
     display: flex;
     flex-direction: row;
     align-items: center;
-    border-bottom: solid black 1px;
+    border-bottom: solid rgb(162, 162, 162) 1px;
     justify-content: space-between;
     background-color: white;
     z-index: 2;
+    padding: 2rem;
 }
 
 .u-text-center {
@@ -67,6 +68,7 @@ h2 {
     font-weight: 400;
     letter-spacing: 0.2rem;
     text-decoration: none;
+    margin: 2rem 0;
 }
 
 .logx {
@@ -87,12 +89,8 @@ h2 {
     top: 0;
     display: none;
     min-height: 14rem;
-    margin-bottom: 14rem;
+    margin-bottom: 16rem;
     z-index: 0;
-}
-
-.push {
-    height: 14rem;
 }
 
 #editBtns {

@@ -1,41 +1,32 @@
 <div class="container">
+    <p id="title-paragraph" class="align-center">
+        A collaborative narration playground.
+        <br>
+        Double-click a place in the story to expand the narrative.
+    </p>
 
-  <p id="title-paragraph"class="align-center">A collaborative narration playground.
-    <br />
-    Double-click a place in the story to expound the narrative.
-  </p>
-
-  {{#if loggedIn}}{{else}}
+    {{#unless loggedIn}}
     <a href="/login" class="button button-primary u-center-block" id="start-btn">Get Started</a>
-  {{/if}}
+    {{/unless}}
 
-  <div id="quillContainer" class="">
-    <div class="" id="editor-container" data-position="0"></div>
-    <div id="editBtns" class="align-center">
-      <button id="submit" class="button button-primary">Submit</button>
-      <button id="delete" class="button button-primary">Delete</button>
+    <div id="quillContainer" class="">
+        <div class="" id="editor-container" data-position="0"></div>
+        <div id="editBtns" class="align-center">
+            <button id="submit" class="button button-primary">Submit</button>
+            <button id="delete" class="button button-primary">Delete</button>
+        </div>
     </div>
-  </div>
 
-  <h3 id="story-title" class="align-center">
-    {{#each stories as |story|}}
-      {{story.storyname}}
-    {{/each}}
-  </h3>
+    <h3 id="story-title" class="align-center">
+        {{#each stories as |story|}}
+        {{story.storyname}}
+        {{/each}}
+    </h3>
 
-  <button id="beginStory">Begin Story</button>
-  <div id="story" class="align-left"></div>
-
-  {{! <div id="quillContainer" class="">
-    <div class="" id="editor-container" data-position="0"></div>
-    <div id="editBtns" class="align-center">
-      <button id="submit">Submit</button>
-      <button id="delete">Delete</button>
+    <button id="beginStory">Begin Story</button>
+    <div id="story" class="align-left">
+        {{!-- Story generated here --}}
     </div>
-  </div> }}
-  <div class="push-footer"></div>
+
+    <div class="push-footer"></div>
 </div>
-<footer class="footer">
-  <a class="navbar-link" href="https://github.com/Corasinth/narratorium">Source Code</a>
-  <a class="navbar-link" href="https://icons8.com">Icon by Icon8</a>
-</footer>
