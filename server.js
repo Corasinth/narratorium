@@ -124,7 +124,6 @@ io.on("connection", async (socket) => {
                     order: [['position', 'ASC']]
                 }],
             });
-            io.emit('displayStory', storyData);
             response({
                 status: newName
             });
@@ -147,7 +146,8 @@ io.on("connection", async (socket) => {
                     id: user_id
                 }
             });
-            const currentCharLimit = userData.character_limit - submission.length;
+            //Increases by one to counteract the default new line character in Quill, but subsequent newlines are counted.
+            const currentCharLimit = userData.character_limit - submission.length + 1;
             if (currentCharLimit < 0) {
                 response({
                     status: false
@@ -156,7 +156,7 @@ io.on("connection", async (socket) => {
             }
             // Updates the users daily limit to ensure database is up to date
             await User.decrement('character_limit', {
-                by: submission.length,
+                by: submission.length-1,
                 where: {
                     id: user_id
                 }
@@ -177,6 +177,11 @@ io.on("connection", async (socket) => {
             const storyData = await Story.findByPk(story_id, {
                 include: [{
                     model: Submission,
+                    where: {
+                        position: {
+                            [Op.between]: [position-submissionArray.length+1, position]
+                        }
+                    },
                     separate: true,
                     order: [['position', 'ASC']],
                     include: [{
@@ -185,11 +190,12 @@ io.on("connection", async (socket) => {
                     }]
                 }],
             });
-            io.emit('displayStory', storyData);
+            io.emit('editStory', storyData);
             response({
                 status: [true, currentCharLimit]
             });
         } catch (err) {
+            console.log(err)
             response({
                 status: err
             });
@@ -221,29 +227,18 @@ io.on("connection", async (socket) => {
             // DELETEs the submission at the specified position
             await Submission.destroy({
                 where: {
-                    position: position
+                    position: position,
+                    story_id: story_id
                 }
             });
             // Decrements the position of any submissions in the story past the specified position
             await Submission.increment('position', {
                 by: -1,
                 where: {
-                    position: { [Op.gt]: position }
+                    position: { [Op.gt]: position },
+                    story_id: story_id
                 }
             });
-            // Re-displays the now-updated story
-            const storyData = await Story.findByPk(story_id, {
-                include: [{
-                    model: Submission,
-                    separate: true,
-                    order: [['position', 'ASC']],
-                    include: [{
-                        model: User,
-                        attributes: ['username']
-                    }]
-                }],
-            });
-            io.emit('displayStory', storyData);
             response({
                 status: [true, currentDelLimit]
             });
@@ -291,7 +286,6 @@ io.on("connection", async (socket) => {
         }
     });
 });
-
 
 // Sync database and start listening
 sequelize.sync({ force: false }).then(() => httpServer.listen(PORT, () => {

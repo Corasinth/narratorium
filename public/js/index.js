@@ -47,6 +47,43 @@ socket.on('displayStory', (data) => {
     renderStoryToHomepage(render);
 });
 
+socket.on('editStory', (data)=>{
+    if (data === null) {
+        return;
+    }
+    let numOfSubmissions = document.querySelectorAll('.edit').length;
+    for (let i = data.submissions[0].position; i < numOfSubmissions; i++) {
+        let currentEl = document.getElementById(i);
+        currentEl.setAttribute('id', i+data.submissions.length)
+    }
+    let startElement = document.getElementById(data.submissions[0].position-1);
+    for (let i = 0; i < data.submissions.length; i++) {
+        let createSubmit = document.createElement("span");
+        createSubmit.className = "edit";
+        createSubmit.id = data.submissions[i].position;
+        createSubmit.textContent = data.submissions[i].submission + " ";
+
+        const username = data.submissions[i].user.username;
+        const timestamp = new Date(data.submissions[i].createdAt).toLocaleString("en-US");
+        tippy(createSubmit, {
+            trigger: "click",
+            allowHTML: true,
+            content: `Written by: ${username} on ${timestamp}`,
+            distance: "0.2rem",
+        })
+        if (Boolean(startElement)) {
+            startElement.insertAdjacentElement('afterend', createSubmit);
+        } else {
+            document.getElementById('story').append(createSubmit);
+        }
+        startElement = createSubmit
+    }
+    data.submissions.length === 0
+        ? beginStory.setAttribute('style', 'display: block')
+        : beginStory.setAttribute('style', 'display: none');
+    editEventListener([data.submissions[0].position, data.submissions[data.submissions.length-1].position]);
+})
+
 // Call this function when a user makes a submission
 function onSubmit(submissionText, position, story_id) {
     socket.emit('submission', submissionText, position, user_id, story_id, (response) => {
@@ -55,7 +92,7 @@ function onSubmit(submissionText, position, story_id) {
         } else if (response.status === false) {
             alert("You've run out of characters to type! Please try again tomorrow.");
         } else {
-            console.error(response);
+            console.error(response.status);
         }
     });
 }
@@ -64,13 +101,18 @@ function onSubmit(submissionText, position, story_id) {
 function onDelete(position, story_id) {
     //deletes html element with id of position
     socket.emit('deletion', position, user_id, story_id, (response) => {
-        console.log(response)
         if (response.status[0] === true) {
+            document.getElementById(position).remove() 
             setDelLimit(response.status[1]);
+            let numOfSubmissions = document.querySelectorAll('.edit').length;
+            for (let i = position + 1; i < numOfSubmissions; i++) {
+                let currentEl = document.getElementById(i);
+                currentEl.setAttribute('id', i-1)
+            }
         } else if (response.status === false) {
             alert("You've run out of deletes! Please try again tomorrow");
         } else {
-            console.error(response);
+            console.error(response.status);
         }
     });
 }
@@ -78,7 +120,7 @@ function onDelete(position, story_id) {
 // Call this function when the user navigates to a story
 function viewStory(story_id) {
     socket.emit('viewStory', story_id, (response) => {
-        console.error(response);
+        console.error(response.status);
     });
 }
 
@@ -92,7 +134,7 @@ function renameStory(newName, story_id) {
         } else if (response.status === 'fail') {
             alert("Sorry, you need 100 characters and 10 deletes unused to rename a story. Please try again tomorrow.");
         } else {
-            console.error(response);
+            console.error(response.status);
         }
     });
 }
@@ -100,7 +142,11 @@ function renameStory(newName, story_id) {
 // Call this function when the user adds a story
 function addStory(storyName) {
     socket.emit('addStory', storyName, (response) => {
-        console.error(response);
+        if (response.status.storyname) {
+            console.log(response.status);
+        } else {
+            console.error(response.status);
+        }
     });
 }
 
@@ -147,7 +193,7 @@ function setDelLimit(deletesRemaining) {
 function renderStoryToHomepage(render) {
     document.getElementById('story').innerHTML = '';
     document.getElementById('story').append(...render);
-    editEventListener();
+    editEventListener(false);
 }
 
 // Assigns a position to each word
@@ -197,8 +243,16 @@ function contentFunc(object) {
 
 let editWord = 0;
 // Double click any word to edit
-function editEventListener() {
-    const edits = Array.from(document.getElementsByClassName('edit'));
+function editEventListener(specificSelection) {
+    let edits 
+    if (specificSelection === false) {
+        edits = Array.from(document.getElementsByClassName('edit'));
+    } else {
+        edits = []
+        for (let i = specificSelection[0]; i < specificSelection[1]+1; i++) {
+            edits.push(document.getElementById(i))
+        }
+    }
     edits.forEach(edit => {
         edit.addEventListener('dblclick', function red(e) {
             document.getElementById('quillContainer').setAttribute('style', 'display:block;');
@@ -212,7 +266,7 @@ function editEventListener() {
             quill.setText('\n');
             editWord = 0;
             const elementId = e.target.id;
-            editWord += elementId;
+            editWord += parseInt(elementId);
             editSubmits(elementId);
             document.getElementById('editBtns').style.display = 'block';
         });
