@@ -49,13 +49,14 @@ socket.on('displayStory', (data) => {
 
 socket.on('editStory', (data)=>{
     console.log(data)
+    console.table(data.submissions)
     if (data === null) {
         return;
     }
     let numOfSubmissions = document.querySelectorAll('.edit').length;
+    console.log(data.submissions[0].position)
     for (let i = data.submissions[0].position; i < numOfSubmissions; i++) {
         let currentEl = document.getElementById(i);
-        console.log(currentEl)
         currentEl.setAttribute('id', i+data.submissions.length)
     }
     let startElement = document.getElementById(data.submissions[0].position-1);
@@ -81,12 +82,6 @@ socket.on('editStory', (data)=>{
     }
     editEventListener();
 })
-function editStory (render, precedingPosition) {
-    for (let word of render) {
-        startElement.insertAdjacentElement('afterend', word)
-    }
-    editEventListener();
-}
 
 // Call this function when a user makes a submission
 function onSubmit(submissionText, position, story_id) {
@@ -96,7 +91,7 @@ function onSubmit(submissionText, position, story_id) {
         } else if (response.status === false) {
             alert("You've run out of characters to type! Please try again tomorrow.");
         } else {
-            console.error(response);
+            console.error(response.status);
         }
     });
 }

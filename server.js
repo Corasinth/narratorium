@@ -150,12 +150,12 @@ io.on("connection", async (socket) => {
             });
         console.log('====== made it after finding a user ======')
             const currentCharLimit = userData.character_limit - submission.length;
-            if (currentCharLimit < 0) {
-                response({
-                    status: false
-                });
-                return;
-            }
+            // if (currentCharLimit < 0) {
+            //     response({
+            //         status: false
+            //     });
+            //     return;
+            // }
         console.log('====== made it after max character check ======')
             // Updates the users daily limit to ensure database is up to date
             await User.decrement('character_limit', {
@@ -173,10 +173,9 @@ io.on("connection", async (socket) => {
             });
         console.log('====== made it after submission position incrementer  ======')
             //For each word in the submission, creates a new table entry and an appropriate position
-            let positionNew = position
             for (let submission of submissionArray) {
                 //Check that the create parameters are correct
-                positionNew++;
+                position++;
                 await Submission.create({ submission, position, user_id, story_id });
             }
         console.log('====== made it after creating new submission rows ======')
@@ -184,9 +183,11 @@ io.on("connection", async (socket) => {
             const storyData = await Story.findByPk(story_id, {
                 include: [{
                     model: Submission,
-                    // where : {
-                    //     [Op.between]: [position+1, positionNew]
-                    // },
+                    where: {
+                        position: {
+                            [Op.between]: [position-submissionArray.length+1, position]
+                        }
+                    },
                     separate: true,
                     order: [['position', 'ASC']],
                     include: [{
@@ -218,12 +219,12 @@ io.on("connection", async (socket) => {
                 }
             });
             const currentDelLimit = userData.delete_limit - 1;
-            if (currentDelLimit < 0) {
-                response({
-                    status: false
-                });
-                return;
-            }
+            // if (currentDelLimit < 0) {
+            //     response({
+            //         status: false
+            //     });
+            //     return;
+            // }
             // Updates the users daily limit to ensure database is up to date
             await User.decrement('delete_limit', {
                 by: 1,
@@ -291,7 +292,6 @@ io.on("connection", async (socket) => {
         }
     });
 });
-
 
 // Sync database and start listening
 sequelize.sync({ force: false }).then(() => httpServer.listen(PORT, () => {
