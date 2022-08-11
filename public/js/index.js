@@ -112,7 +112,7 @@ function onDelete(position, story_id) {
         } else if (response.status === false) {
             alert("You've run out of deletes! Please try again tomorrow");
         } else {
-            console.error(response);
+            console.error(response.status);
         }
     });
 }
@@ -120,7 +120,7 @@ function onDelete(position, story_id) {
 // Call this function when the user navigates to a story
 function viewStory(story_id) {
     socket.emit('viewStory', story_id, (response) => {
-        console.error(response);
+        console.error(response.status);
     });
 }
 
@@ -134,7 +134,7 @@ function renameStory(newName, story_id) {
         } else if (response.status === 'fail') {
             alert("Sorry, you need 100 characters and 10 deletes unused to rename a story. Please try again tomorrow.");
         } else {
-            console.error(response);
+            console.error(response.status);
         }
     });
 }
@@ -143,9 +143,9 @@ function renameStory(newName, story_id) {
 function addStory(storyName) {
     socket.emit('addStory', storyName, (response) => {
         if (response.status.storyname) {
-            console.log(response);
+            console.log(response.status);
         } else {
-            console.error(response);
+            console.error(response.status);
         }
     });
 }
