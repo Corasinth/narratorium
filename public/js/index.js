@@ -48,8 +48,6 @@ socket.on('displayStory', (data) => {
 });
 
 socket.on('editStory', (data)=>{
-    console.log(data)
-    console.table(data.submissions)
     if (data === null) {
         return;
     }
@@ -60,7 +58,6 @@ socket.on('editStory', (data)=>{
     }
     let startElement = document.getElementById(data.submissions[0].position-1);
     for (let i = 0; i < data.submissions.length; i++) {
-        console.log(data.submissions[i])
         let createSubmit = document.createElement("span");
         createSubmit.className = "edit";
         createSubmit.id = data.submissions[i].position;
@@ -84,7 +81,7 @@ socket.on('editStory', (data)=>{
     data.submissions.length === 0
         ? beginStory.setAttribute('style', 'display: block')
         : beginStory.setAttribute('style', 'display: none');
-    editEventListener();
+    editEventListener([data.submissions[0].position, data.submissions[data.submissions.length-1].position]);
 })
 
 // Call this function when a user makes a submission
@@ -196,7 +193,7 @@ function setDelLimit(deletesRemaining) {
 function renderStoryToHomepage(render) {
     document.getElementById('story').innerHTML = '';
     document.getElementById('story').append(...render);
-    editEventListener();
+    editEventListener(false);
 }
 
 // Assigns a position to each word
@@ -247,8 +244,16 @@ function contentFunc(object) {
 
 let editWord = 0;
 // Double click any word to edit
-function editEventListener() {
-    const edits = Array.from(document.getElementsByClassName('edit'));
+function editEventListener(specificSelection) {
+    let edits 
+    if (specificSelection === false) {
+        edits = Array.from(document.getElementsByClassName('edit'));
+    } else {
+        edits = []
+        for (let i = specificSelection[0]; i < specificSelection[1]+1; i++) {
+            edits.push(document.getElementById(i))
+        }
+    }
     edits.forEach(edit => {
         edit.addEventListener('dblclick', function red(e) {
             document.getElementById('quillContainer').setAttribute('style', 'display:block;');
