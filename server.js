@@ -146,18 +146,17 @@ io.on("connection", async (socket) => {
                     id: user_id
                 }
             });
-        console.log('====== made it after finding a user ======')
-            const currentCharLimit = userData.character_limit - submission.length;
+            //Increases by one to counteract the default new line character in Quill, but subsequent newlines are counted.
+            const currentCharLimit = userData.character_limit - submission.length + 1;
             if (currentCharLimit < 0) {
                 response({
                     status: false
                 });
                 return;
             }
-        console.log('====== made it after max character check ======')
             // Updates the users daily limit to ensure database is up to date
             await User.decrement('character_limit', {
-                by: submission.length,
+                by: submission.length-1,
                 where: {
                     id: user_id
                 }
@@ -228,14 +227,16 @@ io.on("connection", async (socket) => {
             // DELETEs the submission at the specified position
             await Submission.destroy({
                 where: {
-                    position: position
+                    position: position,
+                    story_id: story_id
                 }
             });
             // Decrements the position of any submissions in the story past the specified position
             await Submission.increment('position', {
                 by: -1,
                 where: {
-                    position: { [Op.gt]: position }
+                    position: { [Op.gt]: position },
+                    story_id: story_id
                 }
             });
             response({

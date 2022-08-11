@@ -81,6 +81,9 @@ socket.on('editStory', (data)=>{
         }
         startElement = createSubmit
     }
+    data.submissions.length === 0
+        ? beginStory.setAttribute('style', 'display: block')
+        : beginStory.setAttribute('style', 'display: none');
     editEventListener();
 })
 
