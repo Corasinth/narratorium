@@ -1,18 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap");
 
 /* ================ GENERAL =============== */
-/* * {
-    border: red solid 1px;
-} */
-
-/* html {
-    margin-top: 40px;
-} */
-
 body {
     height: 100vh;
-    /* display:flex; 
-    flex-direction:column;  */
 }
 
 a {
@@ -43,7 +33,6 @@ a {
     font-weight: 600;
     letter-spacing: 0.2rem;
     text-decoration: none;
-    /* line-height: 6.5rem; */
     color: #222;
 }
 
@@ -156,7 +145,7 @@ h2 {
 }
 
 /* ================ STORY =============== */
-/* title, title_p, story title */
+/* title, title_paragraph, story name */
 .align-center {
     text-align: center;
 }

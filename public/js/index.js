@@ -174,7 +174,6 @@ async function newQuill() {
     onQuillCreate();
 };
 
-
 // Transforms/submits user input into Quill editor for db submission and page rendering  
 function createSubmits() {
     let submissions = '';
