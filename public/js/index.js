@@ -54,13 +54,13 @@ socket.on('editStory', (data)=>{
         return;
     }
     let numOfSubmissions = document.querySelectorAll('.edit').length;
-    console.log(data.submissions[0].position)
     for (let i = data.submissions[0].position; i < numOfSubmissions; i++) {
         let currentEl = document.getElementById(i);
         currentEl.setAttribute('id', i+data.submissions.length)
     }
     let startElement = document.getElementById(data.submissions[0].position-1);
     for (let i = 0; i < data.submissions.length; i++) {
+        console.log(data.submissions[i])
         let createSubmit = document.createElement("span");
         createSubmit.className = "edit";
         createSubmit.id = data.submissions[i].position;
@@ -79,6 +79,7 @@ socket.on('editStory', (data)=>{
         } else {
             document.getElementById('story').append(createSubmit);
         }
+        startElement = createSubmit
     }
     editEventListener();
 })

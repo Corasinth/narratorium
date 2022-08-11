@@ -138,9 +138,7 @@ io.on("connection", async (socket) => {
     //Takes in submission, position, and user_id, and story_id and POSTs a new submission to the database accordingly
     socket.on('submission', async (submission, position, user_id, story_id, response) => {
         // Separates submission string by word
-        console.log('====== made it into the event ======')
         let submissionArray = submission.split(' ');
-        console.log('====== made it after the split ======')
         try {
             // Checks if the user has enough characters left to submit the response
             const userData = await User.findOne({
@@ -150,12 +148,12 @@ io.on("connection", async (socket) => {
             });
         console.log('====== made it after finding a user ======')
             const currentCharLimit = userData.character_limit - submission.length;
-            // if (currentCharLimit < 0) {
-            //     response({
-            //         status: false
-            //     });
-            //     return;
-            // }
+            if (currentCharLimit < 0) {
+                response({
+                    status: false
+                });
+                return;
+            }
         console.log('====== made it after max character check ======')
             // Updates the users daily limit to ensure database is up to date
             await User.decrement('character_limit', {
@@ -164,21 +162,18 @@ io.on("connection", async (socket) => {
                     id: user_id
                 }
             });
-        console.log('====== made it after decrementer ======')
             // Updates the position of every of word in the story after the submission position, by an amount equal to the # of words inserted, 
             await Submission.increment({ position: submissionArray.length }, {
                 where: {
                     position: { [Op.gt]: position }
                 }
             });
-        console.log('====== made it after submission position incrementer  ======')
             //For each word in the submission, creates a new table entry and an appropriate position
             for (let submission of submissionArray) {
                 //Check that the create parameters are correct
                 position++;
                 await Submission.create({ submission, position, user_id, story_id });
             }
-        console.log('====== made it after creating new submission rows ======')
             // Re-displays the now-updated story
             const storyData = await Story.findByPk(story_id, {
                 include: [{
@@ -196,9 +191,7 @@ io.on("connection", async (socket) => {
                     }]
                 }],
             });
-        console.log('====== made it after sending data for op btween the positions ======')
             io.emit('editStory', storyData);
-        console.log('====== made it after emission event ======')
             response({
                 status: [true, currentCharLimit]
             });
@@ -219,12 +212,12 @@ io.on("connection", async (socket) => {
                 }
             });
             const currentDelLimit = userData.delete_limit - 1;
-            // if (currentDelLimit < 0) {
-            //     response({
-            //         status: false
-            //     });
-            //     return;
-            // }
+            if (currentDelLimit < 0) {
+                response({
+                    status: false
+                });
+                return;
+            }
             // Updates the users daily limit to ensure database is up to date
             await User.decrement('delete_limit', {
                 by: 1,
