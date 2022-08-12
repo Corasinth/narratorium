@@ -18,6 +18,7 @@ const { Op } = require("sequelize");
 
 // Import models 
 const { User, Story, Submission } = require('./models/index');
+const { lchown } = require("fs");
 
 // Initialize packages
 const app = express();
@@ -260,10 +261,9 @@ io.on("connection", async (socket) => {
                     id: user_id
                 }
             });
+            let dbDate = userData.last_logged_in.toISOString()
             // Checks if it's a new day and updates the user's limits accordingly, sending back limits to client.
-            if (userData.last_logged_in === null || 
-                `${userData.last_logged_in[8]}${userData.last_logged_in[9]}` < currentDay || 
-                `${userData.last_logged_in[5]}${userData.last_logged_in[6]}` < currentMonth) {
+            if (userData.last_logged_in === null || `${dbDate[8]}${dbDate[9]}` < currentDay || `${dbDate[5]}${dbDate[6]}` < currentMonth) {
                 await User.update({ character_limit: charLimit, delete_limit: delLimit, last_logged_in: currentDate }, {
                     where: {
                         id: {
