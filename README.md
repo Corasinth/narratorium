@@ -79,7 +79,11 @@ npm run watch
 ```
 ***
 
-## Created by:
+## Credits
+
+The icon was sourced from [flaticon.io](https://www.flaticon.com/free-icon/pen-tool_1014859?term=pen&page=1&position=10&page=1&position=10&related_id=1014859&origin=tag)
+
+### Created by:
 
 [Abdur-Rauf Ahmed](https://github.com/Corasinth)  
 [Brandon Espinosa](https://github.com/espinbrandon49)  
